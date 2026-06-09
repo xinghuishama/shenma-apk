@@ -87,24 +87,49 @@ jobs:
           </FrameLayout>
           EOF
 
-          # 3. 修改 MainActivity 代码（加判断避免重复）
-          for f in $(find app/src -name "MainActivity.java" -o -name "MainActivity.kt"); do
-            if [ "${f##*.}" = "java" ]; then
-              if ! grep -q "setBackgroundColor(0xFF000000)" "$f"; then
-                sed -i 's/webView\.loadUrl/webView.setBackgroundColor(0xFF000000);\n        webView.loadUrl/g' "$f"
-              fi
-              if ! grep -q "ColorDrawable(0xFF000000)" "$f"; then
-                sed -i 's/super\.onCreate(savedInstanceState);/super.onCreate(savedInstanceState);\n        getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(0xFF000000));/g' "$f"
-              fi
-            else
-              if ! grep -q "setBackgroundColor(0xFF000000)" "$f"; then
-                sed -i 's/webView\.loadUrl/webView.setBackgroundColor(0xFF000000)\n        webView.loadUrl/g' "$f"
-              fi
-              if ! grep -q "ColorDrawable(0xFF000000)" "$f"; then
-                sed -i 's/super\.onCreate(savedInstanceState)/super.onCreate(savedInstanceState)\n        window.setBackgroundDrawable(android.graphics.drawable.ColorDrawable(0xFF000000))/g' "$f"
-              fi
-            fi
-          done
+                    # 3. 直接重写 MainActivity.java（避免 sed 破坏语法）
+          cat > app/src/main/java/com/xinghuishama/shenma/MainActivity.java << 'EOF'
+          package com.xinghuishama.shenma;
+
+          import android.os.Bundle;
+          import android.webkit.WebSettings;
+          import android.webkit.WebView;
+          import android.webkit.WebViewClient;
+          import android.graphics.drawable.ColorDrawable;
+          import androidx.appcompat.app.AppCompatActivity;
+
+          public class MainActivity extends AppCompatActivity {
+              private WebView webView;
+
+              @Override
+              protected void onCreate(Bundle savedInstanceState) {
+                  super.onCreate(savedInstanceState);
+                  getWindow().setBackgroundDrawable(new ColorDrawable(0xFF000000));
+                  setContentView(R.layout.activity_main);
+                  
+                  webView = findViewById(R.id.webView);
+                  webView.setBackgroundColor(0xFF000000);
+                  
+                  WebSettings settings = webView.getSettings();
+                  settings.setJavaScriptEnabled(true);
+                  settings.setDomStorageEnabled(true);
+                  settings.setCacheMode(WebSettings.LOAD_DEFAULT);
+                  
+                  webView.setWebViewClient(new WebViewClient());
+                  webView.loadUrl("file:///android_asset/index.html");
+              }
+
+              @Override
+              public void onBackPressed() {
+                  if (webView.canGoBack()) {
+                      webView.goBack();
+                  } else {
+                      super.onBackPressed();
+                  }
+              }
+          }
+          EOF
+
 
       - name: Build with Gradle
         run: ./gradlew assembleDebug
