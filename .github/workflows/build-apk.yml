@@ -32,7 +32,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Fix startup black screen (no white flash)
+      - name: Fix startup black screen
         run: |
           # 1. 黑色主题
           mkdir -p app/src/main/res/values
@@ -59,28 +59,48 @@ jobs:
               </style>
           </resources>
           EOF
-          # 应用主题
+          # 应用主题到 Manifest
           sed -i 's/android:theme="@style\/[^"]*"/android:theme="@style\/AppTheme"/g' app/src/main/AndroidManifest.xml
           sed -i 's/android:theme="@android:style\/[^"]*"/android:theme="@style\/AppTheme"/g' app/src/main/AndroidManifest.xml
           if ! grep -q 'android:theme=' app/src/main/AndroidManifest.xml; then
             sed -i 's/<application/<application android:theme="@style\/AppTheme"/g' app/src/main/AndroidManifest.xml
           fi
-          # 2. WebView 和窗口背景设为黑色
+
+          # 2. 直接重写 activity_main.xml（避免 sed 破坏 XML）
+          mkdir -p app/src/main/res/layout
+          cat > app/src/main/res/layout/activity_main.xml << 'EOF'
+          <?xml version="1.0" encoding="utf-8"?>
+          <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@android:color/black">
+
+              <WebView
+                  android:id="@+id/webView"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:background="@android:color/black" />
+
+          </FrameLayout>
+          EOF
+
+          # 3. 修改 MainActivity 代码（加判断避免重复）
           for f in $(find app/src -name "MainActivity.java" -o -name "MainActivity.kt"); do
             if [ "${f##*.}" = "java" ]; then
-              sed -i 's/super\.onCreate(savedInstanceState);/super.onCreate(savedInstanceState);\n        getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(0xFF000000));/g' "$f"
-              sed -i 's/webView\.loadUrl/webView.setBackgroundColor(0xFF000000);\n        webView.loadUrl/g' "$f"
+              if ! grep -q "setBackgroundColor(0xFF000000)" "$f"; then
+                sed -i 's/webView\.loadUrl/webView.setBackgroundColor(0xFF000000);\n        webView.loadUrl/g' "$f"
+              fi
+              if ! grep -q "ColorDrawable(0xFF000000)" "$f"; then
+                sed -i 's/super\.onCreate(savedInstanceState);/super.onCreate(savedInstanceState);\n        getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(0xFF000000));/g' "$f"
+              fi
             else
-              sed -i 's/super\.onCreate(savedInstanceState)/super.onCreate(savedInstanceState)\n        window.setBackgroundDrawable(android.graphics.drawable.ColorDrawable(0xFF000000))/g' "$f"
-              sed -i 's/webView\.loadUrl/webView.setBackgroundColor(0xFF000000)\n        webView.loadUrl/g' "$f"
+              if ! grep -q "setBackgroundColor(0xFF000000)" "$f"; then
+                sed -i 's/webView\.loadUrl/webView.setBackgroundColor(0xFF000000)\n        webView.loadUrl/g' "$f"
+              fi
+              if ! grep -q "ColorDrawable(0xFF000000)" "$f"; then
+                sed -i 's/super\.onCreate(savedInstanceState)/super.onCreate(savedInstanceState)\n        window.setBackgroundDrawable(android.graphics.drawable.ColorDrawable(0xFF000000))/g' "$f"
+              fi
             fi
-          done
-          # 3. layout XML 背景黑色
-          for f in $(find app/src -name "*.xml" -path "*/layout/*"); do
-            sed -i 's/<WebView/<WebView android:background="@android:color\/black"/g' "$f"
-            sed -i 's/<LinearLayout/<LinearLayout android:background="@android:color\/black"/g' "$f"
-            sed -i 's/<RelativeLayout/<RelativeLayout android:background="@android:color\/black"/g' "$f"
-            sed -i 's/<FrameLayout/<FrameLayout android:background="@android:color\/black"/g' "$f"
           done
 
       - name: Build with Gradle
