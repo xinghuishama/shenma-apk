@@ -32,9 +32,6 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Fix missing icons
-        run: |
-          sed -i 's/ android:icon="@mipmap\/ic_launcher"//g' app/src/main/AndroidManifest.xml
           sed -i 's/ android:roundIcon="@mipmap\/ic_launcher_round"//g' app/src/main/AndroidManifest.xml
 
       - name: Build with Gradle
