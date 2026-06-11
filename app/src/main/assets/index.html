@@ -1774,15 +1774,28 @@ if (!Object.entries) {
   function initAutoRefresh() {
     updateCountdown();
     countdownTimer = setInterval(updateCountdown, 1000);
+    
+    /* ========== 新增：切回前台立即补刷 ========== */
+    document.addEventListener('visibilitychange', function() {
+      if (document.visibilityState === 'visible') {
+        // 延迟300ms确保WebView从冻结恢复后再请求
+        setTimeout(function() {
+          fetchLottery();
+        }, 300);
+      }
+    });
+    
     setInterval(() => {
       if (isFetchingLottery || document.visibilityState !== "visible") return;
       const now = new Date();
       const totalSec = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
-      // 高频窗口：21:33:25 ~ 21:35:00（实际开奖 21:33:30，提前5秒准备，结束留余量）
-      const DRAW_START = 21 * 3600 + 33 * 60 + 25;       // 21:33:25
-      const DRAW_END   = 21 * 3600 + 35 * 60 ;       // 21:35:00
-      // 高频条件：在时间窗口内 且 本期开奖尚未完成
-      const isInDrawWindow = totalSec >= DRAW_START && totalSec <= DRAW_END && !isCurrentDrawComplete;
+      
+      const DRAW_START = 21 * 3600 + 33 * 60 + 25;  // 21:33:25（开奖前5秒）
+      const DRAW_END   = 21 * 3600 + 34 * 60 + 30;  // 21:34:30（开奖完成+5秒余量）
+      
+      /* ========== 修复：高频窗口内始终刷新，无视 isCurrentDrawComplete ========== */
+      const isInDrawWindow = totalSec >= DRAW_START && totalSec <= DRAW_END;
+      
       if (isInDrawWindow) {
         if (!window._lastAutoFetchTime || (Date.now() - window._lastAutoFetchTime) >= 5000) {
           window._lastAutoFetchTime = Date.now();
@@ -1790,6 +1803,8 @@ if (!Object.entries) {
         }
         return;
       }
+      
+      // 常规刷新
       if (!window._lastRegularFetchTime || (Date.now() - window._lastRegularFetchTime) >= 60000) {
         window._lastRegularFetchTime = Date.now();
         fetchLottery();
