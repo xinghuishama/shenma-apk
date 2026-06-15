@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -7,11 +6,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="Cache-Control" content="max-age=3600">
 <meta name="description" content="神玛再现 · 杀码助手，支持频次分析、实时开奖、历史查询">
-<title>神码再现 v3.6.8 · 完整特效版（支持繁体字生肖）</title>
+<title>神码再现 v3.6.8 · 生肖简繁兼容版</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-/* ======================== style.css v3.6.8 (完整保留所有特效) ======================== */
+/* ======================== style.css v3.6.8 (inlined) ======================== */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 body {
   font-family: 'Orbitron', system-ui, -apple-system, sans-serif;
@@ -255,7 +254,7 @@ body {
   min-width: 3rem !important;
 }
 
-/* ======================== 真实开奖风格蛋形球 ======================== */
+/* ======================== 真实开奖风格蛋形球 (已移除高光) ======================== */
    .result-balls-row {
       display: flex;
       align-items: center;
@@ -294,7 +293,6 @@ body {
   text-shadow: 0 2px 5px rgba(0,0,0,0.4);
   box-shadow:
     inset 0 -5px 12px rgba(0,0,0,0.35),
-    inset 0 5px 12px rgba(255,255,255,0.3),
     0 4px 14px rgba(0,0,0,0.45);
   position: relative;
   overflow: hidden;
@@ -453,7 +451,7 @@ body {
   .history-item-header { font-size: 10px; }
 }
 
-/* ======================== 独苗飞入动画 (完整版) ======================== */
+/* ======================== 独苗飞入动画 ======================== */
 .flying-unique-ball {
   position: fixed;
   width: 48px;
@@ -591,7 +589,7 @@ body {
   height: 100vh;
   background: #000;
 }
-/* CSS Fallback: 即使 JS 完全失败，4 秒后也自动隐藏启动画面 */
+/* CSS Fallback: 即使 JS 完全失败，4 秒后自动隐藏启动画面 */
 @keyframes autoHideSplash {
   0%, 85% { opacity: 1; }
   100% { opacity: 0; visibility: hidden; pointer-events: none; }
@@ -626,56 +624,56 @@ body {
 <!-- ======================== 启动画面：矩阵数字雨 ======================== -->
 <div id="splash-screen">
   <canvas id="matrix"></canvas>
-  <div class="splash-title">神码再现</div>
+  <div class="splash-title">&#31070;&#30721;&#20877;&#29616;</div>
 </div>
 
 <!-- ======================== 主应用界面 ======================== -->
 <div id="main-app">
   <main class="relative z-10 max-w-4xl mx-auto p-3">
     <header class="relative overflow-hidden rounded-t-xl bg-gradient-to-r from-[#00ffea]/20 via-[#9d00ff]/20 to-[#ff0055]/20 border-b border-[#00ffea]/30 p-6 text-center">
-      <h1 class="relative z-10 text-3xl font-black bg-gradient-to-r from-[#00ffea] via-[#ff0055] to-[#9d00ff] bg-clip-text text-transparent tracking-wider">神码再现</h1>
-      <p class="relative z-10 text-sm text-gray-400 mt-2 tracking-widest">命中衰减 · 频次动态调整</p>
+      <h1 class="relative z-10 text-3xl font-black bg-gradient-to-r from-[#00ffea] via-[#ff0055] to-[#9d00ff] bg-clip-text text-transparent tracking-wider">&#31070;&#30721;&#20877;&#29616;</h1>
+      <p class="relative z-10 text-sm text-gray-400 mt-2 tracking-widest">&#21629;&#20013;&#34928;&#20943; &#183; &#39057;&#27425;&#21160;&#24577;&#35843;&#25972;</p>
     </header>
 
     <section class="border-x border-b border-[#00ffea]/20 p-4 rounded-b-xl">
-      <textarea id="numbers" rows="3" maxlength="15000" class="w-full bg-transparent border border-[#00ffea]/30 rounded-lg p-3 text-[#00ffea] font-mono text-sm resize-y min-h-[100px] focus:outline-none focus:border-[#00ffea] transition-all" placeholder="输入号码或生肖，例如: 12 25 36 龙 蛇 马 8 17 29 41"></textarea>
+      <textarea id="numbers" rows="3" maxlength="15000" class="w-full bg-transparent border border-[#00ffea]/30 rounded-lg p-3 text-[#00ffea] font-mono text-sm resize-y min-h-[100px] focus:outline-none focus:border-[#00ffea] transition-all" placeholder="&#36755;&#20837;&#21495;&#30721;&#25110;&#29983;&#32918;&#65292;&#20363;&#22914;: 12 25 36 &#40857;&#34503;&#39532; 8 17 29 41"></textarea>
       <div class="flex justify-between items-center mt-2 text-xs text-gray-500 font-mono">
-        <span>智能分析引擎 <span class="text-emerald-400 text-[10px]">(防抖200ms · 上限5000个号码)</span></span>
+        <span>&#26234;&#33021;&#20998;&#26512;&#24341;&#25806; <span class="text-emerald-400 text-[10px]">(&#38450;&#25238;200ms &#183; &#19978;&#38480;5000&#20010;&#21495;&#30721;)</span></span>
         <div class="flex gap-3">
-          <span>有效: <span id="charCount" class="text-[#00ffea] font-bold">0</span></span>
-          <span id="numberWarn" class="text-red-400 hidden">⚠️ 已截断至5000个</span>
+          <span>&#26377;&#25928;: <span id="charCount" class="text-[#00ffea] font-bold">0</span></span>
+          <span id="numberWarn" class="text-red-400 hidden">&#9888;&#65039; &#24050;&#25130;&#26029;&#33267;5000&#20010;</span>
         </div>
       </div>
       <div class="flex gap-2 mt-4">
         <button id="exampleBtn" class="flex-1 bg-transparent border border-[#00ffea]/50 text-[#00ffea] py-2 px-4 rounded-lg text-sm font-semibold hover:bg-[#00ffea]/10 transition-all active:scale-95 flex items-center justify-center gap-2">
-          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 16 16"><path d="M13 3H3v2h10V3zm0 4H3v2h10V7zm0 4H3v2h10v-2z"/></svg>示例
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 16 16"><path d="M13 3H3v2h10V3zm0 4H3v2h10V7zm0 4H3v2h10v-2z"/></svg>&#31034;&#20363;
         </button>
         <button id="clearBtn" class="flex-1 bg-transparent border border-[#ff0055]/50 text-[#ff0055] py-2 px-4 rounded-lg text-sm font-semibold hover:bg-[#ff0055]/10 transition-all active:scale-95 flex items-center justify-center gap-2">
-          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0a8 8 0 100 16A8 8 0 008 0zm3 10.5L10.5 12 8 9.5 5.5 12 5 10.5 7.5 8 5 5.5 5.5 4 8 6.5 10.5 4l.5 1.5L8.5 8z"/></svg>清除输入
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0a8 8 0 100 16A8 8 0 008 0zm3 10.5L10.5 12 8 9.5 5.5 12 5 10.5 7.5 8 5 5.5 5.5 4 8 6.5 10.5 4l.5 1.5L8.5 8z"/></svg>&#28165;&#38500;&#36755;&#20837;
         </button>
       </div>
     </section>
 
     <section class="mt-4 border border-[#00ffea]/20 rounded-xl p-4">
       <div class="flex justify-between items-center mb-4">
-        <h2 class="text-lg font-bold bg-gradient-to-r from-[#00ffea] to-[#ff0055] bg-clip-text text-transparent">分析结果</h2>
+        <h2 class="text-lg font-bold bg-gradient-to-r from-[#00ffea] to-[#ff0055] bg-clip-text text-transparent">&#20998;&#26512;&#32467;&#26524;</h2>
         <button id="copyResultBtn" class="bg-gradient-to-r from-[#00ff88]/80 to-emerald-600/80 text-black py-2 px-4 rounded-lg text-sm font-bold hover:shadow-[0_0_20px_rgba(0,255,136,0.6)] transition-all active:scale-95 flex items-center gap-2">
-          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 16 16"><path d="M4 2v12h8v2H2V2h2zm10 0v12h2V2h-2zm-2 0H6v12h6V2z"/></svg>复制
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 16 16"><path d="M4 2v12h8v2H2V2h2zm10 0v12h2V2h-2zm-2 0H6v12h6V2z"/></svg>&#22797;&#21046;
         </button>
       </div>
       <div id="result" class="min-h-[200px]">
         <div class="flex flex-col items-center justify-center py-12 text-gray-500">
           <svg class="w-20 h-20 mb-4 opacity-50" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" stroke="#00ffea" stroke-width="2" fill="none" stroke-dasharray="5,5"/><path d="M30 50l15 15 25-30" stroke="#00ffea" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
-          <p>输入号码启动分析</p>
+          <p>&#36755;&#20837;&#21495;&#30721;&#21551;&#21160;&#20998;&#26512;</p>
         </div>
       </div>
     </section>
 
     <section class="mt-4 lottery-card border border-[#00ffea]/20 rounded-xl">
       <div class="flex justify-between items-start mb-4">
-        <div><div class="text-gray-400 text-sm mb-1">第 <span id="lotteryPeriod" class="text-gray-300">--</span> 期</div></div>
+        <div><div class="text-gray-400 text-sm mb-1">&#31532; <span id="lotteryPeriod" class="text-gray-300">--</span> &#26399;</div></div>
         <div class="text-right">
-          <div class="text-gray-400 text-sm mb-1">开奖时间</div>
+          <div class="text-gray-400 text-sm mb-1">&#38283;&#29518;&#26178;&#38291;</div>
           <div id="lotteryTime" class="text-gray-300 text-sm">--</div>
           <div id="lastRefreshTime" class="text-xs text-gray-500 mt-1"></div>
         </div>
@@ -683,33 +681,33 @@ body {
       <div class="border-t border-gray-700/50 my-4"></div>
       <div id="lotteryBalls" class="flex justify-center flex-wrap gap-1"></div>
       <button id="refreshLotteryBtn" class="refresh-btn-orange">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>刷新数据
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>&#21047;&#26032;&#25968;&#25454;
       </button>
     </section>
 
-    <footer class="mt-6 text-center text-xs text-gray-600 tracking-widest pb-4">杀码助手仅供港澳居民使用</footer>
+    <footer class="mt-6 text-center text-xs text-gray-600 tracking-widest pb-4">&#26432;&#30721;&#21161;&#25163;&#20165;&#20379;&#28207;&#28595;&#23621;&#27665;&#20351;&#29992;</footer>
   </main>
 
   <nav class="bottom-nav">
     <div class="flex gap-1 overflow-x-auto hide-scrollbar">
-      <button class="nav-item flex-shrink-0 px-3 py-2 bg-[#1a1a2a] rounded-lg text-xs text-gray-400 border border-[#00ffea]/20 transition-all" data-drawer="shama">杀码</button>
-      <button class="nav-item flex-shrink-0 px-3 py-2 bg-[#1a1a2a] rounded-lg text-xs text-gray-400 border border-[#00ffea]/20 transition-all" data-drawer="shengxiao">生肖</button>
-      <button class="nav-item flex-shrink-0 px-3 py-2 bg-[#1a1a2a] rounded-lg text-xs text-gray-400 border border-[#00ffea]/20 transition-all" data-drawer="haomatou">头数</button>
-      <button class="nav-item flex-shrink-0 px-3 py-2 bg-[#1a1a2a] rounded-lg text-xs text-gray-400 border border-[#00ffea]/20 transition-all" data-drawer="weishu">尾数</button>
-      <button class="nav-item flex-shrink-0 px-3 py-2 bg-[#1a1a2a] rounded-lg text-xs text-gray-400 border border-[#00ffea]/20 transition-all" data-drawer="shuduan">数段</button>
-      <button class="nav-item flex-shrink-0 px-3 py-2 bg-[#1a1a2a] rounded-lg text-xs text-gray-400 border border-[#00ffea]/20 transition-all" data-drawer="bose">波色</button>
-      <button class="nav-item flex-shrink-0 px-3 py-2 bg-[#1a1a2a] rounded-lg text-xs text-gray-400 border border-[#00ffea]/20 transition-all" data-drawer="wuxing">五行</button>
-      <button class="nav-item flex-shrink-0 px-3 py-2 bg-[#1a1a2a] rounded-lg text-xs text-gray-400 border border-[#00ffea]/20 transition-all" data-drawer="bandanshuang">半单双</button>
-      <button class="nav-item flex-shrink-0 px-3 py-2 bg-[#1a1a2a] rounded-lg text-xs text-gray-400 border border-[#00ffea]/20 transition-all" data-drawer="heshu">合数</button>
-      <button class="nav-item flex-shrink-0 px-3 py-2 bg-[#1a1a2a] rounded-lg text-xs text-gray-400 border border-[#00ffea]/20 transition-all" data-drawer="history">历史</button>
-      <button class="nav-item flex-shrink-0 px-3 py-2 bg-[#ff0055]/20 rounded-lg text-xs text-[#ff0055] border border-[#ff0055]/30 transition-all" data-drawer="selectnone">清空</button>
+      <button class="nav-item flex-shrink-0 px-3 py-2 bg-[#1a1a2a] rounded-lg text-xs text-gray-400 border border-[#00ffea]/20 transition-all" data-drawer="shama">&#26432;&#30721;</button>
+      <button class="nav-item flex-shrink-0 px-3 py-2 bg-[#1a1a2a] rounded-lg text-xs text-gray-400 border border-[#00ffea]/20 transition-all" data-drawer="shengxiao">&#29983;&#32918;</button>
+      <button class="nav-item flex-shrink-0 px-3 py-2 bg-[#1a1a2a] rounded-lg text-xs text-gray-400 border border-[#00ffea]/20 transition-all" data-drawer="haomatou">&#22836;&#25968;</button>
+      <button class="nav-item flex-shrink-0 px-3 py-2 bg-[#1a1a2a] rounded-lg text-xs text-gray-400 border border-[#00ffea]/20 transition-all" data-drawer="weishu">&#23614;&#25968;</button>
+      <button class="nav-item flex-shrink-0 px-3 py-2 bg-[#1a1a2a] rounded-lg text-xs text-gray-400 border border-[#00ffea]/20 transition-all" data-drawer="shuduan">&#25968;&#27573;</button>
+      <button class="nav-item flex-shrink-0 px-3 py-2 bg-[#1a1a2a] rounded-lg text-xs text-gray-400 border border-[#00ffea]/20 transition-all" data-drawer="bose">&#27874;&#33394;</button>
+      <button class="nav-item flex-shrink-0 px-3 py-2 bg-[#1a1a2a] rounded-lg text-xs text-gray-400 border border-[#00ffea]/20 transition-all" data-drawer="wuxing">&#20116;&#34892;</button>
+      <button class="nav-item flex-shrink-0 px-3 py-2 bg-[#1a1a2a] rounded-lg text-xs text-gray-400 border border-[#00ffea]/20 transition-all" data-drawer="bandanshuang">&#21322;&#21333;&#21452;</button>
+      <button class="nav-item flex-shrink-0 px-3 py-2 bg-[#1a1a2a] rounded-lg text-xs text-gray-400 border border-[#00ffea]/20 transition-all" data-drawer="heshu">&#21512;&#25968;</button>
+      <button class="nav-item flex-shrink-0 px-3 py-2 bg-[#1a1a2a] rounded-lg text-xs text-gray-400 border border-[#00ffea]/20 transition-all" data-drawer="history">&#21382;&#21490;</button>
+      <button class="nav-item flex-shrink-0 px-3 py-2 bg-[#ff0055]/20 rounded-lg text-xs text-[#ff0055] border border-[#ff0055]/30 transition-all" data-drawer="selectnone">&#28165;&#31354;</button>
     </div>
   </nav>
 
   <div id="drawer-overlay" class="fixed inset-0 bg-black/30 z-40 hidden opacity-0 transition-opacity duration-300"></div>
   <div id="drawer-container" class="fixed inset-x-0 bottom-0 z-50 drawer-mobile bg-[#0a0a12] border-t-2 border-[#00ffea] rounded-t-2xl max-h-[90vh] overflow-y-auto shadow-[0_-10px_40px_rgba(0,0,0,0.8)]">
     <div class="sticky top-0 bg-[#0a0a12] border-b border-[#00ffea]/30 p-2 flex justify-between items-center z-10">
-      <h3 id="drawer-title" class="text-[#00ffea] font-bold text-lg">筛选器</h3>
+      <h3 id="drawer-title" class="text-[#00ffea] font-bold text-lg">&#31579;&#36873;&#22120;</h3>
       <button id="drawer-close" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#00ffea]/20 text-[#00ffea] transition-all">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
       </button>
@@ -771,7 +769,7 @@ if (!Object.entries) {
 }
 </script>
 <script>
-// ======================== data.js v3.6.3 (inlined) ========================
+// ======================== data.js v3.6.8 (inlined) ========================
 (function () {
   "use strict";
 
@@ -864,7 +862,7 @@ if (!Object.entries) {
 </script>
 
 <script>
-// ======================== app.js v3.6.8 (完整特效版，仅修复生肖计数) ========================
+// ======================== app.js v3.6.8-mobile (Worker去除版) ========================
 (function () {
   "use strict";
 
@@ -957,7 +955,6 @@ if (!Object.entries) {
     } catch (e) { console.warn("loadState failed", e); }
   }
 
-  // ======================== 历史记录本地缓存 ========================
   function saveHistoryCache() {
     try {
       var keys = Object.keys(historyCache);
@@ -988,7 +985,6 @@ if (!Object.entries) {
     } catch (e) { console.warn("loadHistoryCache failed", e); }
   }
 
-  // ======================== 输入号码缓存 ========================
   function saveInputCache() {
     try {
       var val = DOM.numbers ? DOM.numbers.value : "";
@@ -1012,7 +1008,7 @@ if (!Object.entries) {
 
   function escapeHtml(str) {
     if (str == null) return "";
-    return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+    return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "'");
   }
 
   function showToast(msg) {
@@ -1029,34 +1025,42 @@ if (!Object.entries) {
     }, 2000);
   }
 
-  // ========== 关键修复：生肖标准化 + 完整展开号码 ==========
-  const SIMP_TO_TRAD = { "龙":"龍", "马":"馬", "鸡":"雞" };
-  function normalizeZodiacToken(token) {
-    let t = token.trim();
-    if (SIMP_TO_TRAD[t]) t = SIMP_TO_TRAD[t];
-    if (SHENGXIAO[t]) return t;
-    return null;
+  // ======================== 输入解析（修复：简体生肖兼容） ========================
+  function normalizeZodiac(str) {
+    var map = { '龙': '龍', '马': '馬', '鸡': '雞', '猪': '豬' };
+    var result = '';
+    for (var i = 0; i < str.length; i++) {
+      result += map[str[i]] || str[i];
+    }
+    return result;
   }
 
   function parseInputCount(input) {
     if (!input || !input.trim()) return { nums: [], truncated: false };
-    let cleaned = input.replace(/《.*?》/g, " ").replace(/[^0-9鼠牛虎兔龍蛇馬羊猴雞狗豬龙马鸡]/g, " ").replace(/([鼠牛虎兔龍蛇馬羊猴雞狗豬龙马鸡])/g, " $1 ");
-    const tokens = cleaned.split(" ").filter(t => t.length > 0);
-    if (!tokens.length) return { nums: [], truncated: false };
-    let results = [];
-    for (let token of tokens) {
-      const zodiacKey = normalizeZodiacToken(token);
-      if (zodiacKey && SHENGXIAO[zodiacKey]) {
-        // 关键：展开生肖对应的全部号码
-        results.push(...SHENGXIAO[zodiacKey]);
+    // 正则同时允许简体和繁体生肖字通过，不再被过滤为空格
+    var cleaned = input.replace(/《.*?》/g, " ").replace(/[^0-9鼠牛虎兔龍蛇馬羊猴雞狗豬鸡马龙猪]/g, " ").replace(/([鼠牛虎兔龍蛇馬羊猴雞狗豬鸡马龙猪])/g, " $1 ");
+    var tokens = cleaned.split(/\s+/).filter(function(t) { return t.length > 0; });
+    var results = [];
+    for (var i = 0; i < tokens.length; i++) {
+      var token = tokens[i];
+      // 简体转繁体后再查表
+      var normalizedToken = normalizeZodiac(token);
+      var sxNums = SHENGXIAO[normalizedToken];
+      if (sxNums && sxNums.length) {
+        for (var j = 0; j < sxNums.length; j++) {
+          results.push(sxNums[j]);
+        }
       } else if (/^\d+$/.test(token)) {
-        const n = Number(token);
+        var n = Number(token);
         if (Number.isInteger(n) && n >= 1 && n <= 49) results.push(n);
       }
     }
-    let truncated = false;
-    if (results.length > MAX_NUMBERS) { results = results.slice(0, MAX_NUMBERS); truncated = true; }
-    return { nums: results, truncated };
+    var truncated = false;
+    if (results.length > MAX_NUMBERS) {
+      results = results.slice(0, MAX_NUMBERS);
+      truncated = true;
+    }
+    return { nums: results, truncated: truncated };
   }
 
   let cachedMatchFuncs = null, lastFilterSignature = "";
@@ -1276,6 +1280,7 @@ if (!Object.entries) {
     requestAnimationFrame(phase1);
   }
 
+  // ======================== 结果渲染（修复：清理多余<符号） ========================
   function renderResult(adjustedCount, adjustedTotal, unique, hitCounts, rawCount) {
     try {
       const container = DOM.result;
@@ -1303,7 +1308,7 @@ if (!Object.entries) {
           htmlParts.push('<div class="kill-line relative h-0.5 bg-gradient-to-r from-transparent via-[#00ffea] to-transparent my-3 rounded-full"></div>');
           killDrawn = true;
         }
-        htmlParts.push(`<div class="flex items-start gap-2 mb-2 flex-wrap"><span class="text-xs text-green-500 font-mono min-w-[30px] pt-2">${f}次：</span><div class="flex flex-wrap gap-1.5 flex-1">`);
+        htmlParts.push(`<div class="flex items-start gap-2 mb-2 flex-wrap"><span class="text-xs text-green-500 font-mono min-w-[30px] pt-2">${f}次：</span><div class="grid grid-cols-7 gap-2 flex-1">`);
         const nums = freqMap.get(f).sort((a, b) => a - b);
         sortedFreqMap.set(f, nums.slice());
         nums.forEach(n => {
@@ -1328,7 +1333,7 @@ if (!Object.entries) {
         for (let n = 1; n <= 49; n++) { if (rawCount[n] === 0) zeroCountNumbers.push(n); }
         if (zeroCountNumbers.length > 0) {
           if (!killDrawn) htmlParts.push('<div class="kill-line relative h-0.5 bg-gradient-to-r from-transparent via-[#00ffea] to-transparent my-3 rounded-full"></div>');
-          htmlParts.push('<div class="flex items-start gap-2 mb-2 flex-wrap"><span class="text-xs text-gray-500 font-mono min-w-[30px] pt-2">0次：</span><div class="flex flex-wrap gap-1.5 flex-1">');
+          htmlParts.push('<div class="flex items-start gap-2 mb-2 flex-wrap"><span class="text-xs text-gray-500 font-mono min-w-[30px] pt-2">0次：</span><div class="grid grid-cols-7 gap-2 flex-1">');
           zeroCountNumbers.forEach(n => {
             const color = numProps[n] ? numProps[n].color : getBallColor(n);
             const colorClass = color === "red" ? "ball-red" : (color === "green" ? "ball-green" : "ball-blue");
@@ -1422,6 +1427,8 @@ if (!Object.entries) {
       }
     }
   }
+
+  // ======================== 开奖刷新（修复：新期号重置完成状态） ========================
   async function fetchLottery() {
     if (isFetchingLottery) return;
     isFetchingLottery = true;
@@ -1436,7 +1443,10 @@ if (!Object.entries) {
       if (!item.openCode || typeof item.openCode !== "string" || !item.wave) { showToast("数据字段不完整"); return; }
       try { localStorage.setItem(LS_CACHE_KEY, JSON.stringify({ data, time: Date.now() })); } catch (e) {}
       const isNewPeriod = lastLotteryPeriod !== item.expect;
-      if (isNewPeriod) { lastLotteryPeriod = item.expect; isCurrentDrawComplete = false; }
+      if (isNewPeriod) {
+        lastLotteryPeriod = item.expect;
+        isCurrentDrawComplete = false;
+      }
       renderLottery(item);
       if (checkDrawComplete(item)) {
         if (!isCurrentDrawComplete) { isCurrentDrawComplete = true; showToast("当期开奖已完成"); }
@@ -1459,6 +1469,7 @@ if (!Object.entries) {
     }
   }
 
+  // ======================== 开奖渲染（修复：清理多余<符号） ========================
   function renderLottery(item) {
     const codes = String(item.openCode || "").split(",").map(c => escapeHtml(c.trim()));
     const waves = String(item.wave || "").split(",").map(w => {
@@ -1488,7 +1499,7 @@ if (!Object.entries) {
       const wxCls = wxClassMap[wx] || "";
       const div = document.createElement("div");
       div.className = "result-ball-item";
-      div.innerHTML = '<div class="result-ball ' + colorClass + '" style="animation-delay: ' + (i * 150) + 'ms">' + escapeHtml(codes[i].padStart(2, "0")) + '<div class="result-ball-meta">' + escapeHtml(zodiacs[i]) + '/<span class="' + wxCls + '">' + wx + '</span></div></div>';
+      div.innerHTML = '<div class="result-ball ' + colorClass + '" style="animation-delay: ' + (i * 150) + 'ms">' + escapeHtml(codes[i].padStart(2, "0")) + '<div class="result-ball-meta">' + escapeHtml(zodiacs[i]) + '<span class="' + wxCls + '">' + wx + '</span></div></div>';
       container.appendChild(div);
     }
     if (codes.length >= 7) {
@@ -1502,7 +1513,7 @@ if (!Object.entries) {
       const wxCls = wxClassMap[wx] || "";
       const div = document.createElement("div");
       div.className = "result-ball-item";
-      div.innerHTML = `<div class="result-ball ${colorClass}" style="animation-delay: ${6 * 150}ms">${escapeHtml(codes[6].padStart(2, "0"))}<div class="result-ball-meta">${escapeHtml(zodiacs[6])}/<span class="${wxCls}">${wx}</span></div></div>`;
+      div.innerHTML = `<div class="result-ball ${colorClass}" style="animation-delay: ${6 * 150}ms">${escapeHtml(codes[6].padStart(2, "0"))}<div class="result-ball-meta">${escapeHtml(zodiacs[6])}<span class="${wxCls}">${wx}</span></div></div>`;
       container.appendChild(div);
     }
     void container.offsetHeight;
@@ -1751,6 +1762,7 @@ if (!Object.entries) {
   }
   window.copyResult = copyResult;
 
+  // ======================== 自动刷新（修复：间隔改为5000ms） ========================
   function initAutoRefresh() {
     updateCountdown();
     countdownTimer = setInterval(updateCountdown, 1000);
@@ -1758,11 +1770,11 @@ if (!Object.entries) {
       if (isFetchingLottery || document.visibilityState !== "visible") return;
       const now = new Date();
       const totalSec = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
-      const DRAW_START = 21 * 3600 + 33 * 60 + 25;
-      const DRAW_END   = 21 * 3600 + 34 * 60 + 30;
+      const DRAW_START = 21 * 3600 + 33 * 60 + 25;  // 21:33:25
+      const DRAW_END   = 21 * 3600 + 34 * 60 + 30;  // 21:34:30
       const isInDrawWindow = totalSec >= DRAW_START && totalSec <= DRAW_END;
       if (isInDrawWindow && !isCurrentDrawComplete) {
-        if (!window._lastAutoFetchTime || (Date.now() - window._lastAutoFetchTime) >= 4000) {
+        if (!window._lastAutoFetchTime || (Date.now() - window._lastAutoFetchTime) >= 5000) {
           window._lastAutoFetchTime = Date.now();
           fetchLottery();
         }
@@ -1775,7 +1787,6 @@ if (!Object.entries) {
     }, 1000);
   }
 
-  // ======================== 启动画面切换 (完整保留) ========================
   function initSplashScreen() {
     var splash = document.getElementById('splash-screen');
     var mainApp = document.getElementById('main-app');
@@ -1810,11 +1821,13 @@ if (!Object.entries) {
         var mHeight = window.innerHeight || 640;
         matrixCanvas.width = mWidth;
         matrixCanvas.height = mHeight;
+
         var mChars = '0123456789ABCDEF';
         var mFontSize = 14;
         var mColumns = Math.floor(mWidth / mFontSize);
         var mDrops = [];
         for (var c = 0; c < mColumns; c++) mDrops[c] = Math.floor(Math.random() * 20);
+
         function drawMatrix() {
           mctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
           mctx.fillRect(0, 0, mWidth, mHeight);
@@ -1860,7 +1873,7 @@ if (!Object.entries) {
       loadInputCache();
       fetchLottery(); runAnalysis(); initAutoRefresh(); initSplashScreen();
       window.addEventListener("beforeunload", () => { if (countdownTimer) clearInterval(countdownTimer); });
-      console.log("%c✅ 神码再现 v3.6.8 完整特效版（生肖计数修复）已加载", "color:#00ffea;font-weight:bold");
+      console.log("%c✅ 神码再现 v3.6.8 移动端单文件版已加载", "color:#00ffea;font-weight:bold");
     } catch (e) { console.error("初始化失败:", e); }
   }
 
