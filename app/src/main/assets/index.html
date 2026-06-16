@@ -94,9 +94,9 @@ body {
 .ball-3d{position:relative;width:36px;height:36px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font:700 14px/1 'Orbitron',sans-serif;color:#fff;box-shadow:0 2px 6px rgba(0,0,0,0.3);transition:filter .2s ease,transform .1s;cursor:pointer;user-select:none;-webkit-user-select:none;overflow:visible;transform:translateZ(0);border:none}
 .ball-3d::after{content:'';position:absolute;z-index:-1;left:10%;top:10%;width:80%;height:80%;border-radius:50%;background:rgba(0,0,0,.35);filter:blur(8px);transform:translate(6px,6px);pointer-events:none}
 .ball-3d:active{transform:scale(0.92) translateZ(0)}
-.ball-red{background:radial-gradient(circle at 35% 25%,rgba(255,255,255,0.95) 0%,transparent 25%),radial-gradient(circle at 50% 30%,rgba(255,255,255,0.4) 0%,transparent 40%),radial-gradient(circle at 50% 100%,rgba(0,0,0,0.4) 0%,transparent 60%),linear-gradient(180deg,#ff0000 0%,#cc0044 100%)}
-.ball-green{background:radial-gradient(circle at 35% 25%,rgba(255,255,255,0.95) 0%,transparent 25%),radial-gradient(circle at 50% 30%,rgba(255,255,255,0.4) 0%,transparent 40%),radial-gradient(circle at 50% 100%,rgba(0,0,0,0.4) 0%,transparent 60%),linear-gradient(180deg,#008000 0%,#00aa44 100%)}
-.ball-blue{background:radial-gradient(circle at 35% 25%,rgba(255,255,255,0.95) 0%,transparent 25%),radial-gradient(circle at 50% 30%,rgba(255,255,255,0.4) 0%,transparent 40%),radial-gradient(circle at 50% 100%,rgba(0,0,0,0.4) 0%,transparent 60%),linear-gradient(180deg,#0066ff 0%,#0044cc 100%)}
+.ball-red{background:radial-gradient(circle at 35% 25%,rgba(255,255,255,0.95) 0%,transparent 25%);background-color:#ff0000}
+.ball-green{background:radial-gradient(circle at 35% 25%,rgba(255,255,255,0.95) 0%,transparent 25%);background-color:#008000}
+.ball-blue{background:radial-gradient(circle at 35% 25%,rgba(255,255,255,0.95) 0%,transparent 25%);background-color:#0066ff}
 .ball-gray{background:#666!important;box-shadow:0 0 4px rgba(0,0,0,0.5)!important;filter:none!important}
 .ball-gray::after{display:none}
 
@@ -128,23 +128,44 @@ body {
 }
 
 #result .ball-3d {
-  width: 32px;
-  height: 32px;
-  font-size: 12px;
+  width: 46px;
+  height: 46px;
+  font-size: 16px;
 }
 #result .ball-3d::after {
-  filter: blur(6px);
-  transform: translate(4px, 4px);
+  filter: blur(7px);
+  transform: translate(5px, 5px);
 }
 #result .ball-3d .hit-mark {
-  font-size: 9px;
-  bottom: 0px;
-  right: 2px;
+  font-size: 11px;
+  bottom: 1px;
+  right: 3px;
 }
 #result .ball-3d .hit-mark.cross {
-  font-size: 12px;
+  font-size: 16px;
   bottom: -2px;
-  right: 1px;
+  right: 2px;
+}
+@media (orientation: portrait) and (max-width: 768px) {
+  #result .ball-3d {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+  }
+  #result .ball-3d::after {
+    filter: blur(6px);
+    transform: translate(4px, 4px);
+  }
+  #result .ball-3d .hit-mark {
+    font-size: 9px;
+    bottom: 0px;
+    right: 2px;
+  }
+  #result .ball-3d .hit-mark.cross {
+    font-size: 12px;
+    bottom: -2px;
+    right: 1px;
+  }
 }
 
 @keyframes flashPulse {
@@ -283,7 +304,21 @@ body {
 }
 
 /* ======================== 真实开奖风格蛋形球 ======================== */
-   .result-balls-row {
+   #result .balls-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  flex: 1;
+  align-content: flex-start;
+}
+@media (orientation: portrait) and (max-width: 768px) {
+  #result .balls-row {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 8px;
+  }
+}
+.result-balls-row {
       display: flex;
       align-items: center;
       justify-content: flex-start;
@@ -371,6 +406,7 @@ body {
 }
 
 @media (max-width: 420px) {
+  #result .balls-row { gap: 4px; }
   .result-ball { width: 44px; height: 58px; font-size: 18px; padding-top: 10px; }
   .result-balls-row { gap: 6px; }
   .result-plus-sign { font-size: 18px; padding-bottom: 14px; }
@@ -1191,7 +1227,7 @@ body {
           htmlParts.push('<div class="kill-line relative h-0.5 bg-gradient-to-r from-transparent via-[#00ffea] to-transparent my-3 rounded-full"></div>');
           killDrawn = true;
         }
-        htmlParts.push(`<div class="flex items-start gap-2 mb-2 flex-wrap"><span class="text-xs text-green-500 font-mono min-w-[30px] pt-2">${f}次：</span><div class="grid grid-cols-7 gap-2 flex-1">`);
+        htmlParts.push(`<div class="flex items-start gap-2 mb-2 flex-wrap"><span class="text-xs text-green-500 font-mono min-w-[30px] pt-2">${f}次：</span><div class="balls-row">`);
         const nums = freqMap.get(f).sort((a, b) => a - b);
         sortedFreqMap.set(f, nums.slice());
         nums.forEach(n => {
@@ -1214,7 +1250,7 @@ body {
         for (let n = 1; n <= 49; n++) { if (rawCount[n] === 0) zeroCountNumbers.push(n); }
         if (zeroCountNumbers.length > 0) {
           if (!killDrawn) htmlParts.push('<div class="kill-line relative h-0.5 bg-gradient-to-r from-transparent via-[#00ffea] to-transparent my-3 rounded-full"></div>');
-          htmlParts.push('<div class="flex items-start gap-2 mb-2 flex-wrap"><span class="text-xs text-gray-500 font-mono min-w-[30px] pt-2">0次：</span><div class="grid grid-cols-7 gap-2 flex-1">');
+          htmlParts.push('<div class="flex items-start gap-2 mb-2 flex-wrap"><span class="text-xs text-gray-500 font-mono min-w-[30px] pt-2">0次：</span><div class="balls-row">');
           zeroCountNumbers.forEach(n => {
             const color = numProps[n] ? numProps[n].color : getBallColor(n);
             const colorClass = color === "red" ? "ball-red" : (color === "green" ? "ball-green" : "ball-blue");
