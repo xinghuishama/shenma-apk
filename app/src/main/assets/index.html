@@ -91,14 +91,83 @@ body {
 .dhidden { display: none !important; }
 
 /* ======================== 3D 号码球 ======================== */
-.ball-3d{position:relative;width:36px;height:36px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font:700 14px/1 'Orbitron',sans-serif;color:#fff;box-shadow:0 2px 6px rgba(0,0,0,0.3);transition:filter .2s ease,transform .1s;cursor:pointer;user-select:none;-webkit-user-select:none;overflow:visible;transform:translateZ(0);border:none}
-.ball-3d::after{content:'';position:absolute;z-index:-1;left:10%;top:10%;width:80%;height:80%;border-radius:50%;background:rgba(0,0,0,.35);filter:blur(8px);transform:translate(6px,6px);pointer-events:none}
+/* ---------- 基础球体（保留立体支撑，外阴影轻微） ---------- */
+.ball-3d {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font: 700 14px/1 'Orbitron', sans-serif;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  box-shadow:
+    inset -2px -2px 6px rgba(0, 0, 0, 0.25),
+    inset 2px 2px 6px rgba(255, 255, 255, 0.35),
+    0 3px 10px rgba(0, 0, 0, 0.25);
+  transition: filter .2s ease, transform .1s;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  overflow: visible;
+  transform: translateZ(0);
+  border: none;
+}
+.ball-3d::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  left: 5%;
+  top: 10%;
+  width: 90%;
+  height: 90%;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.3);
+  filter: blur(10px);
+  transform: translate(6px, 8px);
+  pointer-events: none;
+}
 .ball-3d:active{transform:scale(0.92) translateZ(0)}
-.ball-red{background:radial-gradient(circle at 35% 25%,rgba(255,255,255,0.95) 0%,transparent 25%);background-color:#ff0000}
-.ball-green{background:radial-gradient(circle at 35% 25%,rgba(255,255,255,0.95) 0%,transparent 25%);background-color:#008000}
-.ball-blue{background:radial-gradient(circle at 35% 25%,rgba(255,255,255,0.95) 0%,transparent 25%);background-color:#0066ff}
-.ball-gray{background:#666!important;box-shadow:0 0 4px rgba(0,0,0,0.5)!important;filter:none!important}
-.ball-gray::after{display:none}
+
+/* ---------- 高饱和红（鲜艳正红） ---------- */
+.ball-red {
+  background:
+    radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.95) 0%, transparent 30%),
+    radial-gradient(circle at 50% 35%, rgba(255, 255, 255, 0.3) 0%, transparent 45%),
+    radial-gradient(circle at 60% 80%, rgba(180, 0, 0, 0.4) 0%, transparent 60%),
+    linear-gradient(180deg, #ff4d4d 0%, #ff0000 60%, #cc0000 100%);
+}
+.ball-green {
+  background:
+    radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.95) 0%, transparent 30%),
+    radial-gradient(circle at 50% 35%, rgba(255, 255, 255, 0.3) 0%, transparent 45%),
+    radial-gradient(circle at 60% 80%, rgba(0, 130, 0, 0.4) 0%, transparent 60%),
+    linear-gradient(180deg, #33cc33 0%, #009900 60%, #008000 100%);
+}
+.ball-blue {
+  background:
+    radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.95) 0%, transparent 30%),
+    radial-gradient(circle at 50% 35%, rgba(255, 255, 255, 0.3) 0%, transparent 45%),
+    radial-gradient(circle at 60% 80%, rgba(0, 40, 180, 0.4) 0%, transparent 60%),
+    linear-gradient(180deg, #4488ff 0%, #0066ff 60%, #003399 100%);
+}
+
+/* ---------- 灰色球 ---------- */
+.ball-gray {
+  background:
+    radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.6) 0%, transparent 30%),
+    radial-gradient(circle at 50% 35%, rgba(255, 255, 255, 0.2) 0%, transparent 45%),
+    radial-gradient(circle at 60% 80%, rgba(0, 0, 0, 0.25) 0%, transparent 60%),
+    linear-gradient(180deg, #cccccc 0%, #aaaaaa 60%, #888888 100%) !important;
+  box-shadow:
+    inset -2px -2px 6px rgba(0, 0, 0, 0.25),
+    inset 2px 2px 6px rgba(255, 255, 255, 0.35),
+    0 3px 10px rgba(0, 0, 0, 0.25) !important;
+  filter: none !important;
+}
+.ball-gray::after { display: none !important; }
 
 .hit-mark {
   position: absolute;
@@ -128,44 +197,23 @@ body {
 }
 
 #result .ball-3d {
-  width: 46px;
-  height: 46px;
-  font-size: 16px;
+  width: 36px;
+  height: 36px;
+  font-size: 14px;
 }
 #result .ball-3d::after {
-  filter: blur(7px);
-  transform: translate(5px, 5px);
+  filter: blur(8px);
+  transform: translate(4px, 6px);
 }
 #result .ball-3d .hit-mark {
-  font-size: 11px;
+  font-size: 10px;
   bottom: 1px;
   right: 3px;
 }
 #result .ball-3d .hit-mark.cross {
-  font-size: 16px;
-  bottom: -2px;
+  font-size: 14px;
+  bottom: -1px;
   right: 2px;
-}
-@media (orientation: portrait) and (max-width: 768px) {
-  #result .ball-3d {
-    width: 32px;
-    height: 32px;
-    font-size: 12px;
-  }
-  #result .ball-3d::after {
-    filter: blur(6px);
-    transform: translate(4px, 4px);
-  }
-  #result .ball-3d .hit-mark {
-    font-size: 9px;
-    bottom: 0px;
-    right: 2px;
-  }
-  #result .ball-3d .hit-mark.cross {
-    font-size: 12px;
-    bottom: -2px;
-    right: 1px;
-  }
 }
 
 @keyframes flashPulse {
@@ -1700,7 +1748,7 @@ body {
       if (isFetchingLottery || document.visibilityState !== "visible") return;
       const now = new Date();
       const totalSec = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
-      const DRAW_START = 21 * 3600 + 33 * 60 + 25;
+      const DRAW_START = 21 * 3600 + 33 * 60 + 20;
       const DRAW_END   = 21 * 3600 + 34 * 60 + 30;
       const isInDrawWindow = totalSec >= DRAW_START && totalSec <= DRAW_END;
       if (isInDrawWindow && !isCurrentDrawComplete) {
