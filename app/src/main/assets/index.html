@@ -6,11 +6,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="Cache-Control" content="max-age=3600">
 <meta name="description" content="神玛再现 · 杀码助手，支持频次分析、实时开奖、历史查询">
-<title>神码再现 v3.7.2 · 腾讯云时间 + 2秒轮询</title>
+<title>神码再现 v3.7.3 · 健壮刷新系统</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-/* ======================== style.css v3.7.1 (导航统一透明底+青边) ======================== */
+/* ======================== style.css (与v3.7.2完全一致) ======================== */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 body {
   font-family: 'Orbitron', system-ui, -apple-system, sans-serif;
@@ -91,7 +91,7 @@ body {
 .dhidden { display: none !important; }
 
 /* ======================== 3D 号码球 ======================== */
-/* ---------- 基础球体（保留立体支撑，外阴影轻微） ---------- */
+/* ---------- 基础球体 ---------- */
 .ball-3d {
   position: relative;
   width: 36px;
@@ -131,7 +131,6 @@ body {
 }
 .ball-3d:active{transform:scale(0.92) translateZ(0)}
 
-/* ---------- 高饱和红（鲜艳正红） ---------- */
 .ball-red {
   background:
     radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.95) 0%, transparent 30%),
@@ -154,7 +153,6 @@ body {
     linear-gradient(180deg, #4488ff 0%, #0066ff 60%, #0055dd 100%);
 }
 
-/* ---------- 灰色球 ---------- */
 .ball-gray {
   background:
     radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.6) 0%, transparent 30%),
@@ -255,7 +253,6 @@ body {
   transform: translateY(0);
 }
 
-/* 底部导航栏 ———— 与"示例"按钮风格完全一致：透明底+青色包边+青色文字 */
 .bottom-nav {
   position: fixed;
   bottom: 0;
@@ -285,14 +282,12 @@ body {
 .nav-item:active {
   transform: scale(0.96);
 }
-/* 选中态：实心青色 + 黑色文字 + 无边框（符合表格要求） */
 .nav-item.active {
   background: #00ffea !important;
   color: #000000 !important;
   border-color: transparent !important;
   box-shadow: 0 0 12px rgba(0,255,234,0.6);
 }
-/* 清空按钮保持一致，无特殊红色背景 */
 .nav-item[data-drawer="selectnone"] {
   background: transparent !important;
   border-color: rgba(0, 255, 234, 0.5) !important;
@@ -750,7 +745,7 @@ body {
     <footer class="mt-6 text-center text-xs text-gray-600 tracking-widest pb-4">杀码助手仅供港澳居民使用</footer>
   </main>
 
-  <!-- 底部导航：完全统一透明底+青色边框+青色文字 -->
+  <!-- 底部导航 -->
   <nav class="bottom-nav">
     <div class="flex gap-1 overflow-x-auto hide-scrollbar">
       <button class="nav-item" data-drawer="shama">杀码</button>
@@ -776,7 +771,7 @@ body {
 </div>
 
 <script>
-// ======================== data.js v3.7.1 ========================
+// ======================== data.js (与v3.7.2一致) ========================
 (function () {
   "use strict";
   const MAX_NUMBERS = 5000;
@@ -818,7 +813,7 @@ body {
   window.APP_DATA={MAX_NUMBERS,SHENGXIAO,CATEGORIES,DUAN,numProps,ZODIAC_SEQUENCE,BASE_YEAR,generateShengxiaoMap,generateWuxing,getNumberWuxing,WUXING_BASE_SEQ};
 })();
 
-// ======================== app.js v3.7.2 (腾讯云时间 + 2秒轮询) ========================
+// ======================== app.js v3.7.3 (健壮刷新系统) ========================
 (function () {
   "use strict";
 
@@ -857,7 +852,7 @@ body {
       });
       if (!res.ok) throw new Error('HTTP ' + res.status);
       const data = await res.json();
-      const serverTime = data.t * 1000; // 秒转毫秒
+      const serverTime = data.t * 1000;
       timeOffset = serverTime - Date.now();
       console.log('✅ 北京时间同步成功，偏移量:', timeOffset, 'ms');
     } catch (e) {
@@ -865,8 +860,25 @@ body {
       timeOffset = 0;
     }
   }
-  // ========== 校准结束 ==========
 
+  // ========== 开奖窗口配置 ==========
+  const DRAW_CONFIG = {
+    startH: 21, startM: 33, startS: 25,   // 21:33:25 提前5秒进入窗口
+    endH: 21, endM: 34, endS: 30,        // 21:34:30 结束
+    pollMs: 2000,     // 窗口内轮询间隔 2秒
+    regularMs: 60000  // 非窗口期刷新间隔 60秒
+  };
+
+  function isInDrawWindow() {
+    var now = getBeijingNow();
+    var h = now.getHours(), m = now.getMinutes(), s = now.getSeconds();
+    var startSec = DRAW_CONFIG.startH * 3600 + DRAW_CONFIG.startM * 60 + DRAW_CONFIG.startS;
+    var endSec = DRAW_CONFIG.endH * 3600 + DRAW_CONFIG.endM * 60 + DRAW_CONFIG.endS;
+    var nowSec = h * 3600 + m * 60 + s;
+    return nowSec >= startSec && nowSec <= endSec;
+  }
+
+  // ========== DOM 缓存 ==========
   const DOM = {};
   function cacheDOM() {
     const ids = [
@@ -882,6 +894,7 @@ body {
     if (!DOM.drawer_close) DOM.drawer_close = document.getElementById("drawer-close");
   }
 
+  // ========== 状态管理 ==========
   let state = {
     killNums: [],
     selectedFilters: { shengxiao:[], haomatou:[], weishu:[], shuduan:[], bose:[], wuxing:[], bandanshuang:[], heshu:[] }
@@ -946,7 +959,7 @@ body {
         if (data && data.length > 0) toSave[k] = data;
       }
       localStorage.setItem(LS_HISTORY_KEY, JSON.stringify({ cache: toSave, lastYear: historyYearLoaded || "", _t: Date.now() }));
-    } catch (e) { /* 存储空间不足时静默失败 */ }
+    } catch (e) {}
   }
   function loadHistoryCache() {
     try {
@@ -1135,7 +1148,7 @@ body {
   function onStateChange() { runAnalysis(); saveState(); saveInputCache(); }
 
   let currentUniqueElement = null, lastUniqueNum = null;
-  function launchUniqueFlyEffect(targetNum, colorClass) { /* 保持原有酷炫动画不变 */ 
+  function launchUniqueFlyEffect(targetNum, colorClass) {
     var els = document.querySelectorAll(".flying-unique-ball, .blackhole, .distortion, .accretion-disk, .particle-stream");
     for (var ei = 0; ei < els.length; ei++) els[ei].remove();
     var targetEl = DOM.result.querySelector('[data-num="' + targetNum + '"]');
@@ -1344,20 +1357,28 @@ body {
     });
   }
 
+  // ========== 开奖相关变量 ==========
   let isCurrentDrawComplete = false, lastLotteryPeriod = "", isFetchingLottery = false;
   let countdownTimer = null;
+  // 用于健壮刷新系统的额外变量
+  let autoRefreshTimer = null;
+  let inDrawWindowFlag = false;
+  let lastDrawFetchTime = 0;
+  let lastRegularFetchTime = 0;
+
   function checkDrawComplete(item) {
     if (!item || !item.openCode) return false;
     const codes = String(item.openCode).split(",").filter(c => c.trim() !== "");
     return codes.length >= 7;
   }
-  // 使用校准后的北京时间
+
   function getNextDrawTime() {
     const now = getBeijingNow();
     const draw = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 21, 33, 30);
     if (now >= draw) draw.setDate(draw.getDate() + 1);
     return draw;
   }
+
   function updateCountdown() {
     if (!DOM.lotteryTime) return;
     const now = getBeijingNow();
@@ -1369,6 +1390,7 @@ body {
     const s = Math.floor((diff % 60000) / 1000);
     DOM.lotteryTime.textContent = "距开奖 " + String(h).padStart(2, "0") + ":" + String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0");
   }
+
   async function safeFetch(url, options = {}, retries = 2) {
     for (let i = 0; i <= retries; i++) {
       try {
@@ -1393,7 +1415,7 @@ body {
     }
   }
 
-  // ======================== 增强版波色标准化 ========================
+  // ======================== 波色标准化 ========================
   function normalizeWaveToColor(waveRaw, num) {
     if (waveRaw !== undefined && waveRaw !== null && waveRaw !== "") {
       const w = String(waveRaw).trim().toLowerCase();
@@ -1409,7 +1431,7 @@ body {
     return 'blue';
   }
 
-  // ======================== 开奖渲染 ========================
+  // ======================== 开奖拉取和渲染 ========================
   async function fetchLottery() {
     if (isFetchingLottery) return;
     isFetchingLottery = true;
@@ -1498,6 +1520,7 @@ body {
     if (DOM.lotteryTime) DOM.lotteryTime.textContent = escapeHtml((item.openTime || "--").replace(" ", "\n"));
   }
 
+  // ========== 历史记录 ==========
   let currentHistoryData = [], currentHistorySorted = [], currentHistoryPage = 1, historyCache = {}, historyYearLoaded = null;
 
   function renderBallsHTML(codes, waves, zodiacs, year) {
@@ -1577,6 +1600,7 @@ body {
     }
   }
 
+  // ======================== DrawerSystem ========================
   const DrawerSystem = {
     current: null,
     templates: {
@@ -1739,33 +1763,62 @@ body {
   }
   window.copyResult = copyResult;
 
-  // ======================== 自动刷新（2秒轮询） ========================
+  // ======================== 健壮自动刷新系统 ========================
   function initAutoRefresh() {
+    // 定时器1：倒计时显示（每秒更新）
     updateCountdown();
     countdownTimer = setInterval(updateCountdown, 1000);
-    setInterval(() => {
-      if (isFetchingLottery || document.visibilityState !== "visible") return;
-      const now = getBeijingNow();
-      const totalSec = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
-      const DRAW_START = 21 * 3600 + 33 * 60 + 25;
-      const DRAW_END   = 21 * 3600 + 34 * 60 + 30;
-      const isInDrawWindow = totalSec >= DRAW_START && totalSec <= DRAW_END;
-      if (isInDrawWindow && !isCurrentDrawComplete) {
-        // 开奖窗口内高频轮询，间隔 2 秒
-        if (!window._lastAutoFetchTime || (Date.now() - window._lastAutoFetchTime) >= 2000) {
-          window._lastAutoFetchTime = Date.now();
-          fetchLottery();
-        }
-        return;
+
+    // 定时器2：智能时段检测（每4秒检查是否进入开奖窗口）
+    checkDrawWindow();
+    autoRefreshTimer = setInterval(checkDrawWindow, 4000);
+
+    // 定时器3：常规轮询（每10秒检查一次，非开奖时段60秒刷新）
+    setInterval(regularPoll, 10000);
+
+    // 切回前台立即补刷（延迟300ms确保WebView从冻结恢复）
+    document.addEventListener('visibilitychange', function() {
+      if (document.visibilityState === 'visible') {
+        setTimeout(function() { fetchLottery(); }, 300);
       }
-      // 非开奖窗口每分钟一次
-      if (!window._lastRegularFetchTime || (Date.now() - window._lastRegularFetchTime) >= 60000) {
-        window._lastRegularFetchTime = Date.now();
-        fetchLottery();
-      }
-    }, 1000);
+    });
   }
 
+  /* 定时器2回调：智能时段检测
+   * 进入21:33~21:35窗口瞬间立即请求，窗口期内每2秒轮询 */
+  function checkDrawWindow() {
+    var wasInWindow = inDrawWindowFlag;
+    inDrawWindowFlag = isInDrawWindow();
+
+    // 刚进入开奖窗口 → 立即刷新（确保第一时间看到开出号码）
+    if (inDrawWindowFlag && !wasInWindow) {
+      console.log('[开奖时段] 进入关键窗口，启用2秒高频刷新');
+      fetchLottery();
+      lastDrawFetchTime = Date.now();
+      return;
+    }
+
+    // 处于开奖窗口内 → 2秒轮询
+    if (inDrawWindowFlag) {
+      var elapsed = Date.now() - lastDrawFetchTime;
+      if (elapsed >= DRAW_CONFIG.pollMs) {
+        lastDrawFetchTime = Date.now();
+        fetchLottery();
+      }
+    }
+  }
+
+  /* 定时器3回调：常规轮询（非开奖时段低频率保持数据新鲜） */
+  function regularPoll() {
+    if (inDrawWindowFlag) return; // 开奖时段内由checkDrawWindow负责
+    var elapsed = Date.now() - lastRegularFetchTime;
+    if (elapsed >= DRAW_CONFIG.regularMs) {
+      lastRegularFetchTime = Date.now();
+      fetchLottery();
+    }
+  }
+
+  // ======================== 启动画面 ========================
   function initSplashScreen() {
     var splash = document.getElementById('splash-screen');
     var mainApp = document.getElementById('main-app');
@@ -1825,7 +1878,7 @@ body {
   // ======================== 初始化 ========================
   async function init() {
     try {
-      // 先同步时间（最多等待3秒）
+      // 时间同步（最多等待3秒）
       await Promise.race([syncTime(), new Promise(r => setTimeout(r, 3000))]);
       cacheDOM(); loadState(); loadHistoryCache(); subscribe(onStateChange); initResultDelegation(); DrawerSystem.bindGlobalDelegation();
       if (DOM.exampleBtn) DOM.exampleBtn.addEventListener("click", function() { DOM.numbers.value = "龍蛇馬 12 25 36 8 17 29 41 5 19 33 47"; runAnalysis(); saveInputCache(); });
@@ -1848,8 +1901,8 @@ body {
       if (DOM.drawer_overlay) DOM.drawer_overlay.addEventListener("click", () => DrawerSystem.close());
       loadInputCache();
       fetchLottery(); runAnalysis(); initAutoRefresh(); initSplashScreen();
-      window.addEventListener("beforeunload", () => { if (countdownTimer) clearInterval(countdownTimer); });
-      console.log("%c✅ 神码再现 v3.7.2 (腾讯云时间 + 2秒轮询) 已加载", "color:#00ffea;font-weight:bold");
+      window.addEventListener("beforeunload", () => { if (countdownTimer) clearInterval(countdownTimer); if (autoRefreshTimer) clearInterval(autoRefreshTimer); });
+      console.log("%c✅ 神码再现 v3.7.3 (健壮刷新系统) 已加载", "color:#00ffea;font-weight:bold");
     } catch (e) { console.error("初始化失败:", e); }
   }
 
