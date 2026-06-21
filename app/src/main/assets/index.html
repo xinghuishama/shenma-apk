@@ -1699,26 +1699,71 @@ body {
           return;
         }
         if (e.target.id === "historyYear") {
-          const year = e.target.value;
-          if (!year) return;
-          historyYearLoaded = year;
-          const loadDiv = document.getElementById("historyLoading");
-          const cont = document.getElementById("historyContent");
-          if (loadDiv) loadDiv.classList.remove("dhidden");
-          (async () => {
-            try {
-              if (historyCache[year]) currentHistoryData = historyCache[year];
-              else {
-                const res = await safeFetch(API_CONFIG.historyBase + year);
-                const json = await res.json();
-                if (json.code === 200 && Array.isArray(json.data)) { currentHistoryData = json.data; historyCache[year] = json.data; saveHistoryCache(); }
-                else currentHistoryData = [];
-              }
-              currentHistorySorted = []; currentHistoryPage = 1; renderHistoryPage(); saveHistoryCache();
-            } catch (e) { currentHistoryData = []; if (cont) cont.innerHTML = '<div style="color:#f87171;">加载失败</div>'; }
-            finally { if (loadDiv) loadDiv.classList.add("dhidden"); }
-          })();
+    const year = e.target.value;
+    if (!year) return;
+    historyYearLoaded = year;
+    const loadDiv = document.getElementById("historyLoading");
+    const cont = document.getElementById("historyContent");
+    if (loadDiv) loadDiv.classList.remove("dhidden");
+
+    (async () => {
+      try {
+        const isCurrentYear = (year == CURRENT_YEAR);  // 2026年强制刷新
+
+        let data = null;
+
+        // 往年且缓存存在 → 直接使用缓存
+        if (!isCurrentYear && historyCache[year]) {
+          data = historyCache[year];
+          console.log(`📦 使用缓存：${year}年`);
+        } else {
+          // 当前年份 或 缓存缺失 → 从 API 拉取
+          const res = await safeFetch(API_CONFIG.historyBase + year);
+          const json = await res.json();
+          if (json.code === 200 && Array.isArray(json.data) && json.data.length > 0) {
+            data = json.data;
+            historyCache[year] = data;
+            saveHistoryCache();
+          } else {
+            // API 返回空 → 尝试使用缓存（容错）
+            if (historyCache[year] && historyCache[year].length > 0) {
+              data = historyCache[year];
+              showToast("使用缓存数据（API 暂无新期数）");
+            } else {
+              data = [];
+            }
+          }
         }
+
+        if (data && data.length > 0) {
+          currentHistoryData = data;
+        } else {
+          currentHistoryData = [];
+          if (cont) cont.innerHTML = '<div style="color:#f87171;">该年份暂无数据</div>';
+        }
+
+        currentHistorySorted = [];
+        currentHistoryPage = 1;
+        renderHistoryPage();
+
+      } catch (e) {
+        console.warn("历史数据拉取失败:", e);
+        // 网络错误 → 回退缓存
+        if (historyCache[year] && historyCache[year].length > 0) {
+          currentHistoryData = historyCache[year];
+          currentHistorySorted = [];
+          currentHistoryPage = 1;
+          renderHistoryPage();
+          showToast("离线模式：显示缓存数据");
+        } else {
+          currentHistoryData = [];
+          if (cont) cont.innerHTML = '<div style="color:#f87171;">加载失败，请检查网络</div>';
+        }
+      } finally {
+        if (loadDiv) loadDiv.classList.add("dhidden");
+      }
+    })();
+  }
       });
       content.addEventListener("input", e => {
         if (e.target.id === "kill-input") {
