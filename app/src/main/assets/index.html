@@ -214,15 +214,7 @@ body {
   right: 2px;
 }
 
-@keyframes flashPulse {
-  0%, 100% { opacity: 1; filter: brightness(1) saturate(1); transform: scale(1); }
-  50% { opacity: 0.7; filter: brightness(1.3) saturate(1.2); transform: scale(1.15); }
-}
-.flash-unique {
-  animation: flashPulse 0.6s ease-in-out infinite;
-  box-shadow: 0 0 20px currentColor, 0 0 40px currentColor !important;
-  z-index: 10;
-}
+/* [修复] 删除旧版重复定义，.flash-unique / @keyframes flash-pulse 统一保留在下方黑洞动效区块 */
 
 .kill-line::before, .kill-line::after {
   content: '\2702';
@@ -362,27 +354,27 @@ body {
   }
 }
 .result-balls-row {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      gap: 8px;
-      overflow-x: auto;
-      overflow-y: hidden;
-      flex-wrap: nowrap;
-      padding: 8px 4px;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: thin;
-    }
-    .result-balls-row::-webkit-scrollbar {
-      height: 3px;
-    }
-    .result-ball-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      position: relative;
-      flex-shrink: 0;
-    }
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  overflow-x: auto;
+  overflow-y: visible; /* [修复] visible 防止球顶端被裁切 */
+  flex-wrap: nowrap;
+  padding: 8px 4px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+.result-balls-row::-webkit-scrollbar {
+  height: 3px;
+}
+.result-ball-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  flex-shrink: 0;
+}
 
 .result-ball {
   width: 67px;
@@ -577,16 +569,7 @@ body {
   box-shadow: 0 0 30px currentColor, 0 0 60px currentColor, inset 0 0 12px rgba(255,255,255,0.6);
   text-shadow: 0 0 4px rgba(0,0,0,0.8);
 }
-.landing-shock {
-  animation: landShake 0.4s ease !important;
-}
-@keyframes landShake {
-  0% { transform: scale(1); }
-  25% { transform: scale(1.3) rotate(-5deg); }
-  50% { transform: scale(0.9) rotate(3deg); }
-  75% { transform: scale(1.1) rotate(-2deg); }
-  100% { transform: scale(1) rotate(0); }
-}
+/* [修复] 删除旧版 .landing-shock / @keyframes landShake，统一保留下方 blackhole-shock 版本 */
 
 /* 五行抽屉修复 */
 .wuxing-row {
@@ -682,10 +665,12 @@ body {
   height: 100vh;
   background: #000;
 }
+/* [修复] autoHideSplash 末尾不设 visibility:hidden，避免与 JS 的 display:none 冲突；
+   CSS 只负责淡出，JS 负责最终移除元素 */
 #splash-screen { animation: autoHideSplash 4s ease-out forwards; }
 @keyframes autoHideSplash {
   0%, 85% { opacity: 1; }
-  100% { opacity: 0; visibility: hidden; pointer-events: none; }
+  100% { opacity: 0; pointer-events: none; }
 }
 #splash-screen .splash-title {
   position: absolute;
@@ -1701,10 +1686,15 @@ body {
       setTimeout(() => { DOM.drawer_overlay.classList.remove("opacity-0"); DOM.drawer_overlay.style.opacity = "1"; }, 10);
       DOM.drawer_container.classList.add("open");
       this.updateNavState(type);
-      if (type === "history") {
-        const currentYear = new Date().getFullYear();
-        loadHistoryData(String(currentYear));
-      }
+     if (type === "history") {
+    const currentYear = new Date().getFullYear();
+    // 强制清除当前年份缓存，确保每次打开都拉取最新数据
+    if (historyCache[currentYear]) {
+        delete historyCache[currentYear];
+        saveHistoryCache();
+    }
+    loadHistoryData(String(currentYear));
+}
     },
     close() {
       DOM.drawer_container.classList.remove("open");
@@ -1787,10 +1777,16 @@ body {
     setInterval(regularPoll, 10000);
 
     // 切回前台立即补刷（延迟300ms确保WebView从冻结恢复）
+    // [修复] 同时监听 pageshow，安卓 WebView 返回前台时 visibilitychange 不一定触发
+    var _onForeground = function() {
+      setTimeout(function() { fetchLottery(); }, 300);
+    };
     document.addEventListener('visibilitychange', function() {
-      if (document.visibilityState === 'visible') {
-        setTimeout(function() { fetchLottery(); }, 300);
-      }
+      if (document.visibilityState === 'visible') _onForeground();
+    });
+    window.addEventListener('pageshow', function(e) {
+      // persisted=true 表示从 bfcache 恢复，也需要补刷
+      if (e.persisted || document.visibilityState === 'visible') _onForeground();
     });
   }
 
