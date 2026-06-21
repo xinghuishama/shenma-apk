@@ -832,7 +832,7 @@ body {
 
   async function syncTime() {
     try {
-      const res = await fetch('http://vv.video.qq.com/checktime?otype=json', { 
+      const res = await fetch('https://vv.video.qq.com/checktime?otype=json', { 
         signal: AbortSignal.timeout(5000) 
       });
       if (!res.ok) throw new Error('HTTP ' + res.status);
@@ -1501,10 +1501,15 @@ body {
       container.appendChild(div);
     }
     void container.offsetHeight;
-    if (DOM.lotteryPeriod) DOM.lotteryPeriod.textContent = escapeHtml(item.expect || "--");
-    if (DOM.lotteryTime) DOM.lotteryTime.textContent = escapeHtml((item.openTime || "--").replace(" ", "\n"));
-  }
-
+    if (DOM.lotteryPeriod) {
+    DOM.lotteryPeriod.textContent = escapeHtml(item.expect || "--");
+   }
+   if (DOM.lotteryTime) {
+    const rawTime = item.openTime || "--";
+    const timeStr = typeof rawTime === 'string' ? rawTime.replace(" ", "\n") : String(rawTime);
+    DOM.lotteryTime.textContent = escapeHtml(timeStr);
+   }
+}
   // ========== 历史记录 ==========
   let currentHistoryData = [], currentHistorySorted = [], currentHistoryPage = 1, historyCache = {}, historyYearLoaded = null;
 
@@ -1694,7 +1699,7 @@ body {
         saveHistoryCache();
     }
     loadHistoryData(String(currentYear));
-}
+   }
     },
     close() {
       DOM.drawer_container.classList.remove("open");
