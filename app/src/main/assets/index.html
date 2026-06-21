@@ -1548,6 +1548,29 @@ body {
     currentHistorySorted = unique.sort((a, b) => String(b.expect).localeCompare(String(a.expect), undefined, { numeric: true }));
   }
 
+  function loadHistoryData(year) {
+    if (!year) return;
+    historyYearLoaded = year;
+    const loadDiv = document.getElementById("historyLoading");
+    const cont = document.getElementById("historyContent");
+    const sel = document.getElementById("historyYear");
+    if (sel) sel.value = year;
+    if (loadDiv) loadDiv.classList.remove("dhidden");
+    (async () => {
+      try {
+        if (historyCache[year]) currentHistoryData = historyCache[year];
+        else {
+          const res = await safeFetch(API_CONFIG.historyBase + year);
+          const json = await res.json();
+          if (json.code === 200 && Array.isArray(json.data)) { currentHistoryData = json.data; historyCache[year] = json.data; saveHistoryCache(); }
+          else currentHistoryData = [];
+        }
+        currentHistorySorted = []; currentHistoryPage = 1; renderHistoryPage(); saveHistoryCache();
+      } catch (e) { currentHistoryData = []; if (cont) cont.innerHTML = '<div style="color:#f87171;">加载失败</div>'; }
+      finally { if (loadDiv) loadDiv.classList.add("dhidden"); }
+    })();
+  }
+
   function renderHistoryPage() {
     try {
       const cont = document.getElementById("historyContent");
@@ -1678,7 +1701,10 @@ body {
       setTimeout(() => { DOM.drawer_overlay.classList.remove("opacity-0"); DOM.drawer_overlay.style.opacity = "1"; }, 10);
       DOM.drawer_container.classList.add("open");
       this.updateNavState(type);
-      if (type === "history") setTimeout(() => { const sel = document.getElementById("historyYear"); if (sel && !sel.value) sel.value = historyYearLoaded || ""; if (sel) sel.dispatchEvent(new Event("change")); }, 50);
+      if (type === "history") {
+        const currentYear = new Date().getFullYear();
+        loadHistoryData(String(currentYear));
+      }
     },
     close() {
       DOM.drawer_container.classList.remove("open");
@@ -1698,27 +1724,11 @@ body {
           toggleFilter(cb.dataset.drawer, cb.value, cb.checked);
           return;
         }
-    if (e.target.id === "historyYear") {
-    const year = e.target.value;
-    if (!year) return;
-    historyYearLoaded = year;
-    const loadDiv = document.getElementById("historyLoading");
-    const cont = document.getElementById("historyContent");
-    if (loadDiv) loadDiv.classList.remove("dhidden");
-    (async () => {
-      try {
-        if (historyCache[year]) currentHistoryData = historyCache[year];
-        else {
-          const res = await safeFetch(API_CONFIG.historyBase + year);
-          const json = await res.json();
-          if (json.code === 200 && Array.isArray(json.data)) { currentHistoryData = json.data; historyCache[year] = json.data; saveHistoryCache(); }
-          else currentHistoryData = [];
+        if (e.target.id === "historyYear") {
+          const year = e.target.value;
+          if (!year) return;
+          loadHistoryData(year);
         }
-        currentHistorySorted = []; currentHistoryPage = 1; renderHistoryPage(); saveHistoryCache();
-      } catch (e) { currentHistoryData = []; if (cont) cont.innerHTML = '<div style="color:#f87171;">加载失败</div>'; }
-      finally { if (loadDiv) loadDiv.classList.add("dhidden"); }
-    })();
-  }
       });
       content.addEventListener("input", e => {
         if (e.target.id === "kill-input") {
