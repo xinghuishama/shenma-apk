@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="Cache-Control" content="max-age=3600">
+<meta http-equiv="Cache-Control" content="max-age=3600">
 <meta name="description" content="神玛再现 · 杀码助手，支持频次分析、实时开奖、历史查询">
-<title>神码再现 v3.7.3 · 健壮刷新系统</title>
+<title>神码再现 v3.7.4 · 健壮刷新系统</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
@@ -690,6 +690,133 @@ body {
   0%, 100% { opacity: 0.7; text-shadow: 0 0 20px rgba(0,255,0,0.5); }
   50% { opacity: 1; text-shadow: 0 0 40px rgba(0,255,0,0.8), 0 0 80px rgba(0,255,0,0.3); }
 }
+
+/* ======================== 关键修复与健壮性增强 ======================== */
+
+/* [修复#12] 开奖时间支持换行显示 */
+#lotteryTime { white-space: pre-line; }
+
+/* [修复#17] Tailwind 核心类本地 fallback（CDN 失败时保底） */
+.relative { position: relative; }
+.fixed { position: fixed; }
+.sticky { position: sticky; }
+.inset-0 { inset: 0; }
+.inset-x-0 { left: 0; right: 0; }
+.bottom-0 { bottom: 0; }
+.top-0 { top: 0; }
+.z-10 { z-index: 10; }
+.z-40 { z-index: 40; }
+.z-50 { z-index: 50; }
+.z-\[200\] { z-index: 200; }
+.justify-between { justify-content: space-between; }
+.justify-center { justify-content: center; }
+.items-start { align-items: flex-start; }
+.items-center { align-items: center; }
+.flex-col { flex-direction: column; }
+.flex-wrap { flex-wrap: wrap; }
+.flex-1 { flex: 1 1 0%; }
+.gap-1 { gap: 4px; }
+.gap-2 { gap: 8px; }
+.gap-3 { gap: 12px; }
+.overflow-x-auto { overflow-x: auto; }
+.overflow-y-auto { overflow-y: auto; }
+.overflow-hidden { overflow: hidden; }
+.overflow-x-hidden { overflow-x: hidden; }
+.w-full { width: 100%; }
+.w-20 { width: 80px; }
+.h-20 { height: 80px; }
+.w-8 { width: 32px; }
+.h-8 { height: 32px; }
+.w-5 { width: 20px; }
+.h-5 { height: 20px; }
+.min-h-\[100px\] { min-height: 100px; }
+.min-h-\[200px\] { min-height: 200px; }
+.max-h-\[90vh\] { max-height: 90vh; }
+.max-w-4xl { max-width: 56rem; }
+.mx-auto { margin-left: auto; margin-right: auto; }
+.p-2 { padding: 8px; }
+.p-3 { padding: 12px; }
+.p-4 { padding: 16px; }
+.p-6 { padding: 24px; }
+.px-4 { padding-left: 16px; padding-right: 16px; }
+.px-6 { padding-left: 24px; padding-right: 24px; }
+.py-2 { padding-top: 8px; padding-bottom: 8px; }
+.py-3 { padding-top: 12px; padding-bottom: 12px; }
+.py-12 { padding-top: 48px; padding-bottom: 48px; }
+.pb-4 { padding-bottom: 16px; }
+.pb-20 { padding-bottom: 80px; }
+.mt-1 { margin-top: 4px; }
+.mt-2 { margin-top: 8px; }
+.mt-4 { margin-top: 16px; }
+.mt-6 { margin-top: 24px; }
+.mb-1 { margin-bottom: 4px; }
+.mb-4 { margin-bottom: 16px; }
+.my-4 { margin-top: 16px; margin-bottom: 16px; }
+.rounded-lg { border-radius: 8px; }
+.rounded-xl { border-radius: 12px; }
+.rounded-t-xl { border-top-left-radius: 12px; border-top-right-radius: 12px; }
+.rounded-t-2xl { border-top-left-radius: 16px; border-top-right-radius: 16px; }
+.rounded-full { border-radius: 9999px; }
+.rounded-b-xl { border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; }
+.text-3xl { font-size: 30px; line-height: 36px; }
+.text-lg { font-size: 18px; line-height: 28px; }
+.text-sm { font-size: 14px; line-height: 20px; }
+.text-xs { font-size: 12px; line-height: 16px; }
+.text-\[10px\] { font-size: 10px; }
+.font-black { font-weight: 900; }
+.font-bold { font-weight: 700; }
+.font-semibold { font-weight: 600; }
+.font-mono { font-family: monospace; }
+.tracking-wider { letter-spacing: 0.05em; }
+.tracking-widest { letter-spacing: 0.1em; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-transparent { color: transparent; }
+.bg-transparent { background-color: transparent; }
+.bg-black { background-color: #000; }
+.bg-black\/30 { background-color: rgba(0,0,0,0.3); }
+.bg-\[\#0a0a12\] { background-color: #0a0a12; }
+.text-gray-300 { color: #d1d5db; }
+.text-gray-400 { color: #9ca3af; }
+.text-gray-500 { color: #6b7280; }
+.text-gray-600 { color: #4b5563; }
+.text-red-400 { color: #f87171; }
+.text-emerald-400 { color: #34d399; }
+.text-\[\#00ffea\] { color: #00ffea; }
+.text-\[\#ff0055\] { color: #ff0055; }
+.cursor-pointer { cursor: pointer; }
+.resize-y { resize: vertical; }
+.pointer-events-none { pointer-events: none; }
+.-translate-x-1\/2 { transform: translateX(-50%); }
+.translate-y-20 { transform: translateY(5rem); }
+.transition-all { transition-property: all; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
+.border { border-width: 1px; }
+.border-b { border-bottom-width: 1px; }
+.border-t-2 { border-top-width: 2px; }
+.border-t { border-top-width: 1px; }
+.border-x { border-left-width: 1px; border-right-width: 1px; }
+.border-\[\#00ffea\]\/20 { border-color: rgba(0,255,234,0.2); }
+.border-\[\#00ffea\]\/30 { border-color: rgba(0,255,234,0.3); }
+.border-\[\#00ffea\]\/50 { border-color: rgba(0,255,234,0.5); }
+.border-\[\#ff0055\]\/50 { border-color: rgba(255,0,85,0.5); }
+.border-gray-700\/50 { border-color: rgba(55,65,81,0.5); }
+.from-\[\#00ffea\]\/20 { --tw-gradient-from: rgba(0,255,234,0.2); }
+.via-\[\#9d00ff\]\/20 { --tw-gradient-via: rgba(157,0,255,0.2); }
+.to-\[\#ff0055\]\/20 { --tw-gradient-to: rgba(255,0,85,0.2); }
+.from-\[\#00ffea\] { --tw-gradient-from: #00ffea; }
+.to-\[\#ff0055\] { --tw-gradient-to: #ff0055; }
+.from-\[\#00ff88\]\/80 { --tw-gradient-from: rgba(0,255,136,0.8); }
+.to-emerald-600\/80 { --tw-gradient-to: rgba(5,150,105,0.8); }
+.bg-clip-text { -webkit-background-clip: text; background-clip: text; }
+.bg-gradient-to-r { background-image: linear-gradient(to right, var(--tw-gradient-from), var(--tw-gradient-via, var(--tw-gradient-from)), var(--tw-gradient-to)); }
+.hover\:bg-\[\#00ffea\]\/10:hover { background-color: rgba(0,255,234,0.1); }
+.hover\:bg-\[\#ff0055\]\/10:hover { background-color: rgba(255,0,85,0.1); }
+.hover\:shadow-\[0_0_20px_rgba\(0\,255\,136\,0\.6\)\]:hover { box-shadow: 0 0 20px rgba(0,255,136,0.6); }
+.active\:scale-95:active { transform: scale(0.95); }
+.focus\:outline-none:focus { outline: none; }
+.focus\:border-\[\#00ffea\]:focus { border-color: #00ffea; }
+.shadow-\[0_-10px_40px_rgba\(0\,0\,0\,0\.8\)\] { box-shadow: 0 -10px 40px rgba(0,0,0,0.8); }
+.shadow-\[0_0_20px_rgba\(0\,255\,234\,0\.3\)\] { box-shadow: 0 0 20px rgba(0,255,234,0.3); }
 </style>
 </head>
 <body class="mech-grid text-gray-300 overflow-x-hidden">
@@ -777,7 +904,13 @@ body {
   const WUXING_BASE_SEQ = ['金','金','土','土','木','木','火','火','金','金','水','水','木','木','火','火','土','土','水','水','木','木','金','金','土','土','水','水','火','火'];
   function generateWuxing(year) { const offset = year - 2023; const result = { '金':[],'木':[],'水':[],'火':[],'土':[] }; for (let n=1;n<=49;n++) { const wx = WUXING_BASE_SEQ[((n-1)%30 - offset + 30)%30]; result[wx].push(n); } return result; }
   function getNumberWuxing(num,year) { const idx=(num-1)%30; const offset=year-2023; return WUXING_BASE_SEQ[(idx-offset+30)%30]; }
-  const CURRENT_YEAR = new Date().getFullYear();
+  // [修复#1] data.js 中的 CURRENT_YEAR 使用北京时间
+  const CURRENT_YEAR = (function() {
+    const now = new Date();
+    const utcMs = now.getTime() + now.getTimezoneOffset() * 60000;
+    const bjDate = new Date(utcMs + 8 * 3600000);
+    return bjDate.getFullYear();
+  })();
   const SHENGXIAO = generateShengxiaoMap(CURRENT_YEAR);
   const CATEGORIES = { "红波":[1,2,7,8,12,13,18,19,23,24,29,30,34,35,40,45,46], "蓝波":[3,4,9,10,14,15,20,25,26,31,36,37,41,42,47,48], "绿波":[5,6,11,16,17,21,22,27,28,32,33,38,39,43,44,49] };
   const DUAN = { "1段":[1,2,3,4,5,6,7],"2段":[8,9,10,11,12,13,14],"3段":[15,16,17,18,19,20,21],"4段":[22,23,24,25,26,27,28],"5段":[29,30,31,32,33,34,35],"6段":[36,37,38,39,40,41,42],"7段":[43,44,45,46,47,48,49] };
@@ -798,7 +931,7 @@ body {
   window.APP_DATA={MAX_NUMBERS,SHENGXIAO,CATEGORIES,DUAN,numProps,ZODIAC_SEQUENCE,BASE_YEAR,generateShengxiaoMap,generateWuxing,getNumberWuxing,WUXING_BASE_SEQ};
 })();
 
-// ======================== app.js v3.7.3 (健壮刷新系统) ========================
+// ======================== app.js v3.7.4 (健壮刷新系统) ========================
 (function () {
   "use strict";
 
@@ -810,7 +943,12 @@ body {
   const BLUE_SET = new Set(DATA.CATEGORIES ? DATA.CATEGORIES.蓝波 : []);
   const getFive = DATA.getNumberWuxing || function () { return "?"; };
   const generateWuxingTable = DATA.generateWuxing || function () { return { "金":[],"木":[],"水":[],"火":[],"土":[] }; };
-  const CURRENT_YEAR = new Date().getFullYear();
+  const CURRENT_YEAR = (function() {
+    const now = new Date();
+    const utcMs = now.getTime() + now.getTimezoneOffset() * 60000;
+    const bjDate = new Date(utcMs + 8 * 3600000);
+    return bjDate.getFullYear();
+  })();
 
   const API_CONFIG = {
     live: "https://macaumarksix.com/api/live2",
@@ -826,8 +964,12 @@ body {
   // ========== 北京时间校准（腾讯云接口） ==========
   let timeOffset = 0;
 
-  function getBeijingNow() {
-    return new Date(Date.now() + timeOffset);
+  // [修复#1] 获取北京时间对应的 Date 对象（UTC+8，不受设备时区影响）
+  function getBeijingDate() {
+    const ts = Date.now() + timeOffset;
+    const d = new Date(ts);
+    const utcMs = ts + d.getTimezoneOffset() * 60000;
+    return new Date(utcMs + 8 * 3600000);
   }
 
   async function syncTime() {
@@ -836,8 +978,10 @@ body {
         signal: AbortSignal.timeout(5000) 
       });
       if (!res.ok) throw new Error('HTTP ' + res.status);
-      const data = await res.json();
-      const serverTime = data.t * 1000;
+      // [修复#2] JSONP 格式解析
+      const text = await res.text();
+      const json = JSON.parse(text.replace(/^QZOutputJson=/, '').replace(/;?$/, ''));
+      const serverTime = json.t * 1000;
       timeOffset = serverTime - Date.now();
       console.log('✅ 北京时间同步成功，偏移量:', timeOffset, 'ms');
     } catch (e) {
@@ -855,11 +999,11 @@ body {
   };
 
   function isInDrawWindow() {
-    var now = getBeijingNow();
-    var h = now.getHours(), m = now.getMinutes(), s = now.getSeconds();
-    var startSec = DRAW_CONFIG.startH * 3600 + DRAW_CONFIG.startM * 60 + DRAW_CONFIG.startS;
-    var endSec = DRAW_CONFIG.endH * 3600 + DRAW_CONFIG.endM * 60 + DRAW_CONFIG.endS;
-    var nowSec = h * 3600 + m * 60 + s;
+    const now = getBeijingDate();
+    const h = now.getHours(), m = now.getMinutes(), s = now.getSeconds();
+    const startSec = DRAW_CONFIG.startH * 3600 + DRAW_CONFIG.startM * 60 + DRAW_CONFIG.startS;
+    const endSec = DRAW_CONFIG.endH * 3600 + DRAW_CONFIG.endM * 60 + DRAW_CONFIG.endS;
+    const nowSec = h * 3600 + m * 60 + s;
     return nowSec >= startSec && nowSec <= endSec;
   }
 
@@ -902,11 +1046,11 @@ body {
     notify();
   }
   function getFilterSet() {
-    var result = [];
-    var keys = Object.keys(state.selectedFilters);
-    for (var i = 0; i < keys.length; i++) {
-      var arr = state.selectedFilters[keys[i]];
-      for (var j = 0; j < arr.length; j++) result.push(arr[j]);
+    const result = [];
+    const keys = Object.keys(state.selectedFilters);
+    for (let i = 0; i < keys.length; i++) {
+      const arr = state.selectedFilters[keys[i]];
+      for (let j = 0; j < arr.length; j++) result.push(arr[j]);
     }
     return result;
   }
@@ -935,12 +1079,12 @@ body {
 
   function saveHistoryCache() {
     try {
-      var keys = Object.keys(historyCache);
+      const keys = Object.keys(historyCache);
       if (keys.length === 0) return;
-      var toSave = {};
-      for (var i = 0; i < keys.length; i++) {
-        var k = keys[i];
-        var data = historyCache[k];
+      const toSave = {};
+      for (let i = 0; i < keys.length; i++) {
+        const k = keys[i];
+        const data = historyCache[k];
         if (data && data.length > 0) toSave[k] = data;
       }
       localStorage.setItem(LS_HISTORY_KEY, JSON.stringify({ cache: toSave, lastYear: historyYearLoaded || "", _t: Date.now() }));
@@ -948,15 +1092,15 @@ body {
   }
   function loadHistoryCache() {
     try {
-      var raw = localStorage.getItem(LS_HISTORY_KEY);
+      const raw = localStorage.getItem(LS_HISTORY_KEY);
       if (!raw) return;
-      var parsed = JSON.parse(raw);
+      const parsed = JSON.parse(raw);
       if (!parsed || !parsed.cache || typeof parsed.cache !== "object") return;
       if (parsed._t && (Date.now() - parsed._t > HISTORY_CACHE_MAX_AGE)) { localStorage.removeItem(LS_HISTORY_KEY); return; }
-      var years = Object.keys(parsed.cache);
-      for (var i = 0; i < years.length; i++) {
-        var year = years[i];
-        var data = parsed.cache[year];
+      const years = Object.keys(parsed.cache);
+      for (let i = 0; i < years.length; i++) {
+        const year = years[i];
+        const data = parsed.cache[year];
         if (Array.isArray(data) && data.length > 0) historyCache[year] = data;
       }
       if (parsed.lastYear) historyYearLoaded = parsed.lastYear;
@@ -965,16 +1109,16 @@ body {
 
   function saveInputCache() {
     try {
-      var val = DOM.numbers ? DOM.numbers.value : "";
+      const val = DOM.numbers ? DOM.numbers.value : "";
       if (val && val.trim()) localStorage.setItem(LS_INPUT_KEY, JSON.stringify({ value: val, _t: Date.now() }));
       else localStorage.removeItem(LS_INPUT_KEY);
     } catch (e) {}
   }
   function loadInputCache() {
     try {
-      var raw = localStorage.getItem(LS_INPUT_KEY);
+      const raw = localStorage.getItem(LS_INPUT_KEY);
       if (!raw) return;
-      var parsed = JSON.parse(raw);
+      const parsed = JSON.parse(raw);
       if (!parsed || !parsed.value) return;
       if (parsed._t && (Date.now() - parsed._t > 7 * 86400000)) { localStorage.removeItem(LS_INPUT_KEY); return; }
       if (DOM.numbers) {
@@ -1005,9 +1149,9 @@ body {
 
   // ======================== 输入解析 ========================
   function normalizeZodiac(str) {
-    var map = { '龙': '龍', '马': '馬', '鸡': '雞', '猪': '豬' };
-    var result = '';
-    for (var i = 0; i < str.length; i++) {
+    const map = { '龙': '龍', '马': '馬', '鸡': '雞', '猪': '豬' };
+    let result = '';
+    for (let i = 0; i < str.length; i++) {
       result += map[str[i]] || str[i];
     }
     return result;
@@ -1015,21 +1159,21 @@ body {
 
   function parseInputCount(input) {
     if (!input || !input.trim()) return { nums: [], truncated: false };
-    var cleaned = input.replace(/《.*?》/g, " ").replace(/[^0-9鼠牛虎兔龍蛇馬羊猴雞狗豬鸡马龙猪]/g, " ").replace(/([鼠牛虎兔龍蛇馬羊猴雞狗豬鸡马龙猪])/g, " $1 ");
-    var tokens = cleaned.split(/\s+/).filter(function(t) { return t.length > 0; });
-    var results = [];
-    for (var i = 0; i < tokens.length; i++) {
-      var token = tokens[i];
-      var normalizedToken = normalizeZodiac(token);
-      var sxNums = SHENGXIAO[normalizedToken];
+    const cleaned = input.replace(/《.*?》/g, " ").replace(/[^0-9鼠牛虎兔龍蛇馬羊猴雞狗豬鸡马龙猪]/g, " ").replace(/([鼠牛虎兔龍蛇馬羊猴雞狗豬鸡马龙猪])/g, " $1 ");
+    const tokens = cleaned.split(/\s+/).filter(function(t) { return t.length > 0; });
+    const results = [];
+    for (let i = 0; i < tokens.length; i++) {
+      const token = tokens[i];
+      const normalizedToken = normalizeZodiac(token);
+      const sxNums = SHENGXIAO[normalizedToken];
       if (sxNums && sxNums.length) {
-        for (var j = 0; j < sxNums.length; j++) results.push(sxNums[j]);
+        for (let j = 0; j < sxNums.length; j++) results.push(sxNums[j]);
       } else if (/^\d+$/.test(token)) {
-        var n = Number(token);
+        const n = Number(token);
         if (Number.isInteger(n) && n >= 1 && n <= 49) results.push(n);
       }
     }
-    var truncated = false;
+    let truncated = false;
     if (results.length > MAX_NUMBERS) {
       results = results.slice(0, MAX_NUMBERS);
       truncated = true;
@@ -1095,7 +1239,7 @@ body {
     for (let n = 1; n <= 49; n++) {
       let hit = killSet.has(n) ? 1 : 0;
       for (let i = 0; i < funcs.length; i++) {
-        if (funcs[i](n)) { hit++; if (hit > 6) break; }
+        if (funcs[i](n)) { hit++; if (hit >= 6) break; }
       }
       hitCounts[n] = hit;
     }
@@ -1134,27 +1278,27 @@ body {
 
   let currentUniqueElement = null, lastUniqueNum = null;
   function launchUniqueFlyEffect(targetNum, colorClass) {
-    var els = document.querySelectorAll(".flying-unique-ball, .blackhole, .distortion, .accretion-disk, .particle-stream");
-    for (var ei = 0; ei < els.length; ei++) els[ei].remove();
-    var targetEl = DOM.result.querySelector('[data-num="' + targetNum + '"]');
+    const els = document.querySelectorAll(".flying-unique-ball, .blackhole, .distortion, .accretion-disk, .particle-stream");
+    for (let ei = 0; ei < els.length; ei++) els[ei].remove();
+    const targetEl = DOM.result.querySelector('[data-num="' + targetNum + '"]');
     if (!targetEl) return;
-    var targetRect = targetEl.getBoundingClientRect();
-    var endX = targetRect.left + targetRect.width / 2;
-    var endY = targetRect.top + targetRect.height / 2;
-    var centerX = window.innerWidth / 2;
-    var centerY = window.innerHeight * 0.35;
-    var color = colorClass === "ball-red" ? "#ff3366" : colorClass === "ball-green" ? "#33cc66" : "#3366ff";
-    var darkColor = colorClass === "ball-red" ? "#660022" : colorClass === "ball-green" ? "#004422" : "#002266";
-    var disk = document.createElement("div");
+    const targetRect = targetEl.getBoundingClientRect();
+    const endX = targetRect.left + targetRect.width / 2;
+    const endY = targetRect.top + targetRect.height / 2;
+    const centerX = window.innerWidth / 2;
+    const centerY = window.innerHeight * 0.35;
+    const color = colorClass === "ball-red" ? "#ff3366" : colorClass === "ball-green" ? "#33cc66" : "#3366ff";
+    const darkColor = colorClass === "ball-red" ? "#660022" : colorClass === "ball-green" ? "#004422" : "#002266";
+    const disk = document.createElement("div");
     disk.className = "accretion-disk";
     disk.style.cssText = "position:fixed;left:" + centerX + "px;top:" + centerY + "px;width:0;height:0;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);";
     document.body.appendChild(disk);
-    for (var i = 0; i < 4; i++) {
+    for (let i = 0; i < 4; i++) {
       (function(idx) {
-        var ring = document.createElement("div");
+        const ring = document.createElement("div");
         ring.style.cssText = "position:absolute;left:50%;top:50%;width:0;height:0;border:2px solid " + color + ";border-radius:50%;transform:translate(-50%,-50%);opacity:0.6;border-top-color:transparent;border-bottom-color:transparent;";
         disk.appendChild(ring);
-        var anim = ring.animate([
+        const anim = ring.animate([
           { width: '0px', height: '0px', transform: 'translate(-50%,-50%) rotate(0deg)', opacity: 0 },
           { width: (100 + idx * 40) + 'px', height: (100 + idx * 40) + 'px', transform: 'translate(-50%,-50%) rotate(' + (idx % 2 === 0 ? 180 : -180) + 'deg)', opacity: 0.6, offset: 0.5 },
           { width: (80 + idx * 30) + 'px', height: (80 + idx * 30) + 'px', transform: 'translate(-50%,-50%) rotate(' + (idx % 2 === 0 ? 360 : -360) + 'deg)', opacity: 0.3 }
@@ -1162,11 +1306,11 @@ body {
         anim.onfinish = function() { ring.remove(); };
       })(i);
     }
-    var blackhole = document.createElement("div");
+    const blackhole = document.createElement("div");
     blackhole.className = "blackhole";
     blackhole.style.cssText = "position:fixed;left:" + centerX + "px;top:" + centerY + "px;width:0;height:0;background:radial-gradient(circle,#000 20%," + darkColor + " 50%," + color + " 70%,transparent 100%);border-radius:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:9999;box-shadow:0 0 60px " + color + ", inset 0 0 40px " + color + ";";
     document.body.appendChild(blackhole);
-    var bhAnim = blackhole.animate([
+    const bhAnim = blackhole.animate([
       { width: '0px', height: '0px', opacity: 0 },
       { width: '80px', height: '80px', opacity: 1, offset: 0.2 },
       { width: '100px', height: '100px', opacity: 0.9, offset: 0.5 },
@@ -1174,25 +1318,25 @@ body {
       { width: '0px', height: '0px', opacity: 0 }
     ], { duration: 4000, easing: 'ease-in-out' });
     bhAnim.onfinish = function() { blackhole.remove(); disk.remove(); };
-    var ball = document.createElement("div");
+    const ball = document.createElement("div");
     ball.className = "flying-unique-ball " + colorClass;
     ball.textContent = String(targetNum).padStart(2, "0");
     ball.style.cssText = "position:fixed;left:" + endX + "px;top:" + endY + "px;transform:translate(-50%,-50%) scale(1);z-index:10000;";
     document.body.appendChild(ball);
-    var startTime = performance.now();
-    var phase1Duration = 2000;
+    const startTime = performance.now();
+    const phase1Duration = 2000;
     function phase1(now) {
-      var progress = Math.min((now - startTime) / phase1Duration, 1);
-      var ease = progress < 0.5 ? 4 * progress * progress * progress : 1 - Math.pow(-2 * progress + 2, 3) / 2;
-      var currentX = endX + (centerX - endX) * ease;
-      var currentY = endY + (centerY - endY) * ease;
-      var scale = 1 - ease * 0.9;
-      var rotate = ease * 1080;
+      const progress = Math.min((now - startTime) / phase1Duration, 1);
+      const ease = progress < 0.5 ? 4 * progress * progress * progress : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+      const currentX = endX + (centerX - endX) * ease;
+      const currentY = endY + (centerY - endY) * ease;
+      const scale = 1 - ease * 0.9;
+      const rotate = ease * 1080;
       ball.style.left = currentX + "px";
       ball.style.top = currentY + "px";
       ball.style.transform = "translate(-50%,-50%) scale(" + scale + ") rotate(" + rotate + "deg)";
       if (progress < 1 && Math.random() > 0.5) {
-        var trail = document.createElement("div");
+        const trail = document.createElement("div");
         trail.className = "particle-stream";
         trail.style.cssText = "position:fixed;left:" + currentX + "px;top:" + currentY + "px;width:4px;height:4px;background:" + color + ";border-radius:50%;pointer-events:none;z-index:9997;opacity:0.6;";
         document.body.appendChild(trail);
@@ -1207,30 +1351,30 @@ body {
         ball.style.transform = "translate(-50%,-50%) scale(0)";
         ball.style.opacity = 0;
         setTimeout(function() {
-          phase2Start = performance.now();
+          const phase2Start = performance.now();
           requestAnimationFrame(phase2);
         }, 400);
       }
     }
-    var phase2Start;
-    var phase2Duration = 1600;
+    let phase2Start;
+    const phase2Duration = 1600;
     function phase2(now) {
-      var progress = Math.min((now - phase2Start) / phase2Duration, 1);
-      var ease = progress < 0.5 ? 4 * progress * progress * progress : 1 - Math.pow(-2 * progress + 2, 3) / 2;
-      var currentX = centerX + (endX - centerX) * ease;
-      var currentY = centerY + (endY - centerY) * ease;
-      var scale = 0.1 + ease * 0.9;
-      var rotate = -1080 * (1 - ease);
+      const progress = Math.min((now - phase2Start) / phase2Duration, 1);
+      const ease = progress < 0.5 ? 4 * progress * progress * progress : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+      const currentX = centerX + (endX - centerX) * ease;
+      const currentY = centerY + (endY - centerY) * ease;
+      const scale = 0.1 + ease * 0.9;
+      const rotate = -1080 * (1 - ease);
       ball.style.left = currentX + "px";
       ball.style.top = currentY + "px";
       ball.style.transform = "translate(-50%,-50%) scale(" + scale + ") rotate(" + rotate + "deg)";
       ball.style.opacity = Math.min(1, ease * 2);
       if (progress < 0.5 && Math.random() > 0.5) {
-        var jet = document.createElement("div");
+        const jet = document.createElement("div");
         jet.style.cssText = "position:fixed;left:" + currentX + "px;top:" + currentY + "px;width:3px;height:3px;background:" + color + ";border-radius:50%;pointer-events:none;z-index:9997;box-shadow:0 0 6px " + color + ";";
         document.body.appendChild(jet);
-        var jetAngle = Math.random() * Math.PI * 2;
-        var jetDist = 30 + Math.random() * 50;
+        const jetAngle = Math.random() * Math.PI * 2;
+        const jetDist = 30 + Math.random() * 50;
         jet.animate([
           { transform: 'translate(-50%,-50%) scale(1)', opacity: 1 },
           { transform: 'translate(' + (Math.cos(jetAngle)*jetDist) + 'px,' + (Math.sin(jetAngle)*jetDist) + 'px) scale(0)', opacity: 0 }
@@ -1269,7 +1413,7 @@ body {
       const killSet = new Set(state.killNums);
       const sortedFreqMap = new Map();
       const htmlParts = [];
-      for (let f of freqs) {
+      for (const f of freqs) {
         if (!killDrawn && f <= (adjustedTotal / unique)) {
           htmlParts.push('<div class="kill-line relative h-0.5 bg-gradient-to-r from-transparent via-[#00ffea] to-transparent my-3 rounded-full"></div>');
           killDrawn = true;
@@ -1343,9 +1487,8 @@ body {
   }
 
   // ========== 开奖相关变量 ==========
-  let isCurrentDrawComplete = false, lastLotteryPeriod = "", isFetchingLottery = false;
+  let lastLotteryPeriod = "", isCurrentDrawComplete = false, isFetchingLottery = false;
   let countdownTimer = null;
-  // 用于健壮刷新系统的额外变量
   let autoRefreshTimer = null;
   let inDrawWindowFlag = false;
   let lastDrawFetchTime = 0;
@@ -1358,7 +1501,7 @@ body {
   }
 
   function getNextDrawTime() {
-    const now = getBeijingNow();
+    const now = getBeijingDate();
     const draw = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 21, 33, 30);
     if (now >= draw) draw.setDate(draw.getDate() + 1);
     return draw;
@@ -1366,7 +1509,7 @@ body {
 
   function updateCountdown() {
     if (!DOM.lotteryTime) return;
-    const now = getBeijingNow();
+    const now = getBeijingDate();
     const nextDraw = getNextDrawTime();
     const diff = nextDraw - now;
     if (diff <= 0) { DOM.lotteryTime.textContent = "开奖中..."; return; }
@@ -1404,9 +1547,10 @@ body {
   function normalizeWaveToColor(waveRaw, num) {
     if (waveRaw !== undefined && waveRaw !== null && waveRaw !== "") {
       const w = String(waveRaw).trim().toLowerCase();
-      if (w === '1' || w === '红' || w === 'red') return 'red';
-      if (w === '2' || w === '绿' || w === 'green') return 'green';
-      if (w === '3' || w === '蓝' || w === 'blue') return 'blue';
+      // [修复#4] 支持多字波色值及空格容错
+      if (w.includes('红') || w === '1' || w === 'red') return 'red';
+      if (w.includes('绿') || w === '2' || w === 'green') return 'green';
+      if (w.includes('蓝') || w === '3' || w === 'blue') return 'blue';
     }
     if (num >= 1 && num <= 49) {
       if (RED_SET.has(num)) return 'red';
@@ -1428,7 +1572,8 @@ body {
       const data = await res.json();
       if (!Array.isArray(data) || !data[0]) { showToast("暂无开奖数据"); return; }
       const item = data[0];
-      if (!item.openCode || typeof item.openCode !== "string" || !item.wave) { showToast("数据字段不完整"); return; }
+      // [修复#5] 移除对 item.wave 的严格校验，允许 API 缺失 wave 时回退到本地计算
+      if (!item.openCode || typeof item.openCode !== "string") { showToast("数据字段不完整"); return; }
       try { localStorage.setItem(LS_CACHE_KEY, JSON.stringify({ data, time: Date.now() })); } catch (e) {}
       const isNewPeriod = lastLotteryPeriod !== item.expect;
       if (isNewPeriod) {
@@ -1461,6 +1606,26 @@ body {
     const codesRaw = String(item.openCode || "").split(",").map(c => c.trim());
     const wavesRaw = String(item.wave || "").split(",").map(w => w.trim());
     const codes = codesRaw.filter(c => /^\d+$/.test(c) && Number(c) >= 1 && Number(c) <= 49);
+    
+    // [修复#8] 期号未变且已渲染相同数量球，跳过重建避免动画重触
+    if (lastLotteryPeriod === item.expect && DOM.lotteryBalls) {
+      const existingBalls = DOM.lotteryBalls.querySelectorAll('.result-ball').length;
+      if (existingBalls === codes.length && existingBalls > 0) {
+        if (DOM.lotteryPeriod) DOM.lotteryPeriod.textContent = escapeHtml(item.expect || "--");
+        if (DOM.lotteryTime) {
+          const rawTime = item.openTime || "--";
+          const timeStr = typeof rawTime === 'string' ? rawTime.replace(" ", "\n") : String(rawTime);
+          DOM.lotteryTime.textContent = escapeHtml(timeStr);
+        }
+        return;
+      }
+    }
+    
+    if (lastLotteryPeriod !== item.expect) {
+      lastLotteryPeriod = item.expect;
+      isCurrentDrawComplete = false;
+    }
+    
     const colors = codes.map((code, idx) => {
       const num = parseInt(code, 10);
       const waveVal = idx < wavesRaw.length ? wavesRaw[idx] : "";
@@ -1476,10 +1641,12 @@ body {
     container.className = "result-balls-row";
     container.innerHTML = "";
     const wxClassMap = { "金": "wx-gold", "木": "wx-wood", "水": "wx-water", "火": "wx-fire", "土": "wx-earth" };
+    // [修复#16] 使用当前北京时间年份计算五行，确保跨年正确
+    const lotteryYear = getBeijingDate().getFullYear();
     for (let i = 0; i < 6 && i < codes.length; i++) {
       const num = parseInt(codes[i], 10);
       const colorClass = colors[i] === "red" ? "result-ball-red" : (colors[i] === "green" ? "result-ball-green" : "result-ball-blue");
-      const wx = (num >= 1 && num <= 49) ? ((numProps[num] && numProps[num].five) || "?") : "?";
+      const wx = (num >= 1 && num <= 49) ? (getFive(num, lotteryYear) || "?") : "?";
       const wxCls = wxClassMap[wx] || "";
       const div = document.createElement("div");
       div.className = "result-ball-item";
@@ -1493,7 +1660,7 @@ body {
       container.appendChild(plus);
       const num = parseInt(codes[6], 10);
       const colorClass = colors[6] === "red" ? "result-ball-red" : (colors[6] === "green" ? "result-ball-green" : "result-ball-blue");
-      const wx = (num >= 1 && num <= 49) ? ((numProps[num] && numProps[num].five) || "?") : "?";
+      const wx = (num >= 1 && num <= 49) ? (getFive(num, lotteryYear) || "?") : "?";
       const wxCls = wxClassMap[wx] || "";
       const div = document.createElement("div");
       div.className = "result-ball-item";
@@ -1502,19 +1669,20 @@ body {
     }
     void container.offsetHeight;
     if (DOM.lotteryPeriod) {
-    DOM.lotteryPeriod.textContent = escapeHtml(item.expect || "--");
-   }
-   if (DOM.lotteryTime) {
-    const rawTime = item.openTime || "--";
-    const timeStr = typeof rawTime === 'string' ? rawTime.replace(" ", "\n") : String(rawTime);
-    DOM.lotteryTime.textContent = escapeHtml(timeStr);
-   }
-}
+      DOM.lotteryPeriod.textContent = escapeHtml(item.expect || "--");
+    }
+    if (DOM.lotteryTime) {
+      const rawTime = item.openTime || "--";
+      const timeStr = typeof rawTime === 'string' ? rawTime.replace(" ", "\n") : String(rawTime);
+      DOM.lotteryTime.textContent = escapeHtml(timeStr);
+    }
+  }
+
   // ========== 历史记录 ==========
   let currentHistoryData = [], currentHistorySorted = [], currentHistoryPage = 1, historyCache = {}, historyYearLoaded = null;
 
   function renderBallsHTML(codes, waves, zodiacs, year) {
-    year = year || CURRENT_YEAR;
+    year = Number(year) || CURRENT_YEAR;
     let html = "";
     codes.forEach((code, i) => {
       const num = parseInt(code, 10);
@@ -1540,7 +1708,7 @@ body {
 
   function loadHistoryData(year) {
     if (!year) return;
-    historyYearLoaded = year;
+    historyYearLoaded = Number(year);
     const loadDiv = document.getElementById("historyLoading");
     const cont = document.getElementById("historyContent");
     const sel = document.getElementById("historyYear");
@@ -1646,8 +1814,8 @@ body {
       wuxing: () => {
         const table = generateWuxingTable(CURRENT_YEAR);
         const wx = {};
-        var entries = Object.entries(table);
-        for (var ei = 0; ei < entries.length; ei++) { var ek = entries[ei][0], ev = entries[ei][1]; wx[ek] = ev.map(function(n) { return String(n).padStart(2,'0'); }).join(' '); }
+        const entries = Object.entries(table);
+        for (let ei = 0; ei < entries.length; ei++) { const ek = entries[ei][0], ev = entries[ei][1]; wx[ek] = ev.map(function(n) { return String(n).padStart(2,'0'); }).join(' '); }
         const sel = state.selectedFilters.wuxing;
         return '<div class="dspace-y">' + Object.entries(wx).map(([k,v]) => `<div class="wuxing-row"><label class="ditems-center" style="gap:8px;min-width:0;flex-shrink:0;"><input type="checkbox" class="filter-checkbox hidden" value="${k}" data-drawer="wuxing" ${sel.includes(k)?"checked":""}><span class="filter-label dbtn dbtn-fixed wuxing-btn-fixed">${k}</span></label><span class="wuxing-nums">${v}</span></div>`).join("") + "</div>";
       },
@@ -1663,7 +1831,7 @@ body {
       },
       history: () => {
         let opts = "";
-        for (let y = new Date().getFullYear(); y >= 2020; y--) opts += `<option value="${y}">${y}年</option>`;
+       for (let y = CURRENT_YEAR; y >= 2020; y--) opts += `<option value="${y}">${y}年</option>`;
         return [
           '<div>',
             `<select id="historyYear" class="dselect"><option value="">选择年份</option>${opts}</select>`,
@@ -1692,14 +1860,13 @@ body {
       DOM.drawer_container.classList.add("open");
       this.updateNavState(type);
      if (type === "history") {
-    const currentYear = new Date().getFullYear();
-    // 强制清除当前年份缓存，确保每次打开都拉取最新数据
-    if (historyCache[currentYear]) {
-        delete historyCache[currentYear];
-        saveHistoryCache();
-    }
-    loadHistoryData(String(currentYear));
-   }
+    const currentYear = getBeijingDate().getFullYear();  // ✅ 北京时间
+        if (historyCache[currentYear]) {
+          delete historyCache[currentYear];
+          saveHistoryCache();
+        }
+        loadHistoryData(String(currentYear));
+      }
     },
     close() {
       DOM.drawer_container.classList.remove("open");
@@ -1737,10 +1904,10 @@ body {
       });
     },
     updateNavState(activeType) {
-      var navItems = document.querySelectorAll(".nav-item");
-      for (var ni = 0; ni < navItems.length; ni++) {
-        var el = navItems[ni];
-        var dr = el.dataset.drawer;
+      const navItems = document.querySelectorAll(".nav-item");
+      for (let ni = 0; ni < navItems.length; ni++) {
+        const el = navItems[ni];
+        const dr = el.dataset.drawer;
         if (dr === activeType) { el.classList.add("active"); el.classList.remove("bg-transparent", "text-gray-400"); }
         else { el.classList.remove("active"); if (dr !== "selectnone") el.classList.add("bg-transparent", "text-gray-400"); }
       }
@@ -1779,26 +1946,27 @@ body {
     autoRefreshTimer = setInterval(checkDrawWindow, 4000);
 
     // 定时器3：常规轮询（每10秒检查一次，非开奖时段60秒刷新）
-    setInterval(regularPoll, 10000);
+    const regularPollTimer = setInterval(regularPoll, 10000);
 
     // 切回前台立即补刷（延迟300ms确保WebView从冻结恢复）
-    // [修复] 同时监听 pageshow，安卓 WebView 返回前台时 visibilitychange 不一定触发
-    var _onForeground = function() {
+    const _onForeground = function() {
       setTimeout(function() { fetchLottery(); }, 300);
     };
     document.addEventListener('visibilitychange', function() {
       if (document.visibilityState === 'visible') _onForeground();
     });
     window.addEventListener('pageshow', function(e) {
-      // persisted=true 表示从 bfcache 恢复，也需要补刷
       if (e.persisted || document.visibilityState === 'visible') _onForeground();
     });
+    
+    // 保存引用以便清理
+    window._shenmaTimers = { countdownTimer, autoRefreshTimer, regularPollTimer };
   }
 
   /* 定时器2回调：智能时段检测
    * 进入21:33~21:35窗口瞬间立即请求，窗口期内每2秒轮询 */
   function checkDrawWindow() {
-    var wasInWindow = inDrawWindowFlag;
+    const wasInWindow = inDrawWindowFlag;
     inDrawWindowFlag = isInDrawWindow();
 
     // 刚进入开奖窗口 → 立即刷新（确保第一时间看到开出号码）
@@ -1811,7 +1979,7 @@ body {
 
     // 处于开奖窗口内 → 2秒轮询
     if (inDrawWindowFlag) {
-      var elapsed = Date.now() - lastDrawFetchTime;
+      const elapsed = Date.now() - lastDrawFetchTime;
       if (elapsed >= DRAW_CONFIG.pollMs) {
         lastDrawFetchTime = Date.now();
         fetchLottery();
@@ -1822,7 +1990,7 @@ body {
   /* 定时器3回调：常规轮询（非开奖时段低频率保持数据新鲜） */
   function regularPoll() {
     if (inDrawWindowFlag) return; // 开奖时段内由checkDrawWindow负责
-    var elapsed = Date.now() - lastRegularFetchTime;
+    const elapsed = Date.now() - lastRegularFetchTime;
     if (elapsed >= DRAW_CONFIG.regularMs) {
       lastRegularFetchTime = Date.now();
       fetchLottery();
@@ -1831,10 +1999,9 @@ body {
 
   // ======================== 启动画面 ========================
   function initSplashScreen() {
-    var splash = document.getElementById('splash-screen');
-    var mainApp = document.getElementById('main-app');
-    var matrixInterval = null;
-    var switched = false;
+    const splash = document.getElementById('splash-screen');
+    let matrixInterval = null;
+    let switched = false;
     function switchToMain() {
       if (switched) return;
       switched = true;
@@ -1846,40 +2013,50 @@ body {
       splash.style.pointerEvents = 'none';
       setTimeout(function() {
         splash.style.display = 'none';
-        if (window.dispatchEvent) {
-          try { window.dispatchEvent(new Event('resize')); } catch(e) {}
-        }
+        try { window.dispatchEvent(new Event('resize')); } catch(e) {}
       }, 600);
     }
     splash.addEventListener('click', switchToMain);
     splash.addEventListener('touchstart', switchToMain);
-    try {
-      var matrixCanvas = document.getElementById('matrix');
-      if (matrixCanvas && matrixCanvas.getContext) {
-        var mctx = matrixCanvas.getContext('2d');
-        var mWidth = window.innerWidth || 360;
-        var mHeight = window.innerHeight || 640;
-        matrixCanvas.width = mWidth;
-        matrixCanvas.height = mHeight;
-        var mChars = '0123456789ABCDEF';
-        var mFontSize = 14;
-        var mColumns = Math.floor(mWidth / mFontSize);
-        var mDrops = [];
-        for (var c = 0; c < mColumns; c++) mDrops[c] = Math.floor(Math.random() * 20);
-        function drawMatrix() {
-          mctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-          mctx.fillRect(0, 0, mWidth, mHeight);
-          mctx.fillStyle = '#0f0';
-          mctx.font = mFontSize + 'px monospace';
-          for (var i = 0; i < mDrops.length; i++) {
-            var char = mChars[Math.floor(Math.random() * mChars.length)];
-            mctx.fillText(char, i * mFontSize, mDrops[i] * mFontSize);
-            if (mDrops[i] * mFontSize > mHeight && Math.random() > 0.975) {
-              mDrops[i] = 0;
-            }
-            mDrops[i]++;
-          }
+    
+    // [修复#13] Canvas 响应屏幕旋转/resize
+    const matrixCanvas = document.getElementById('matrix');
+    let mctx = null, mWidth, mHeight, mColumns, mDrops = [];
+    const mFontSize = 14;
+    const mChars = '0123456789ABCDEF';
+    
+    function resizeMatrix() {
+      if (!matrixCanvas) return;
+      mWidth = window.innerWidth || 360;
+      mHeight = window.innerHeight || 640;
+      matrixCanvas.width = mWidth;
+      matrixCanvas.height = mHeight;
+      mctx = matrixCanvas.getContext('2d');
+      mColumns = Math.floor(mWidth / mFontSize);
+      mDrops = [];
+      for (let c = 0; c < mColumns; c++) mDrops[c] = Math.floor(Math.random() * 20);
+    }
+    
+    function drawMatrix() {
+      if (!mctx) return;
+      mctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      mctx.fillRect(0, 0, mWidth, mHeight);
+      mctx.fillStyle = '#0f0';
+      mctx.font = mFontSize + 'px monospace';
+      for (let i = 0; i < mDrops.length; i++) {
+        const char = mChars[Math.floor(Math.random() * mChars.length)];
+        mctx.fillText(char, i * mFontSize, mDrops[i] * mFontSize);
+        if (mDrops[i] * mFontSize > mHeight && Math.random() > 0.975) {
+          mDrops[i] = 0;
         }
+        mDrops[i]++;
+      }
+    }
+    
+    try {
+      if (matrixCanvas && matrixCanvas.getContext) {
+        resizeMatrix();
+        window.addEventListener('resize', resizeMatrix);
         matrixInterval = setInterval(drawMatrix, 50);
       }
     } catch (e) { /* Canvas 不支持时跳过 */ }
@@ -1897,23 +2074,27 @@ body {
       if (DOM.copyResultBtn) DOM.copyResultBtn.addEventListener("click", copyResult);
       if (DOM.numbers) DOM.numbers.addEventListener("input", function() { runAnalysis(); saveInputCache(); });
       if (DOM.refreshLotteryBtn) DOM.refreshLotteryBtn.addEventListener("click", function() { fetchLottery(); });
-      var navBtns = document.querySelectorAll(".nav-item");
-      for (var nb = 0; nb < navBtns.length; nb++) {
-        (function(btn) {
-          btn.addEventListener("click", function(e) {
-            e.stopPropagation();
-            var drawer = btn.dataset.drawer;
-            if (drawer === "selectnone") { clearAllFilters(); DrawerSystem.close(); showToast("已清空所有筛选"); }
-            else DrawerSystem.open(drawer);
-          });
-        })(navBtns[nb]);
+      const navBtns = document.querySelectorAll(".nav-item");
+      for (let nb = 0; nb < navBtns.length; nb++) {
+        const btn = navBtns[nb];
+        btn.addEventListener("click", function(e) {
+          e.stopPropagation();
+          const drawer = btn.dataset.drawer;
+          if (drawer === "selectnone") { clearAllFilters(); DrawerSystem.close(); showToast("已清空所有筛选"); }
+          else DrawerSystem.open(drawer);
+        });
       }
       if (DOM.drawer_close) DOM.drawer_close.addEventListener("click", () => DrawerSystem.close());
       if (DOM.drawer_overlay) DOM.drawer_overlay.addEventListener("click", () => DrawerSystem.close());
       loadInputCache();
       fetchLottery(); runAnalysis(); initAutoRefresh(); initSplashScreen();
-      window.addEventListener("beforeunload", () => { if (countdownTimer) clearInterval(countdownTimer); if (autoRefreshTimer) clearInterval(autoRefreshTimer); });
-      console.log("%c✅ 神码再现 v3.7.3 (健壮刷新系统) 已加载", "color:#00ffea;font-weight:bold");
+      window.addEventListener("beforeunload", () => {
+        const t = window._shenmaTimers || {};
+        if (t.countdownTimer) clearInterval(t.countdownTimer);
+        if (t.autoRefreshTimer) clearInterval(t.autoRefreshTimer);
+        if (t.regularPollTimer) clearInterval(t.regularPollTimer);
+      });
+      console.log("%c✅ 神码再现 v3.7.4 (健壮刷新系统) 已加载", "color:#00ffea;font-weight:bold");
     } catch (e) { console.error("初始化失败:", e); }
   }
 
