@@ -13,7 +13,11 @@ android {
         versionCode 30704
         versionName "3.7.4"
     }
-
+    buildTypes {
+    debug {
+        minifyEnabled true
+        proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+    }
     buildTypes {
         release {
             minifyEnabled true
