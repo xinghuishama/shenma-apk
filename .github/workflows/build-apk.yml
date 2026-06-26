@@ -66,7 +66,7 @@ jobs:
             sed -i 's/<application/<application android:theme="@style\/AppTheme"/g' app/src/main/AndroidManifest.xml
           fi
           
-           # 修复 roundIcon 指向缺失的 ic_launcher_round
+          # 修复 roundIcon 指向缺失的 ic_launcher_round
           sed -i 's/android:roundIcon="@mipmap\/ic_launcher_round"/android:roundIcon="@mipmap\/ic_launcher"/g' app/src/main/AndroidManifest.xml
 
           # 2. 直接重写 activity_main.xml（避免 sed 破坏 XML）
@@ -87,7 +87,7 @@ jobs:
           </FrameLayout>
           EOF
 
-                    # 3. 直接重写 MainActivity.java（避免 sed 破坏语法）
+          # 3. 直接重写 MainActivity.java（避免 sed 破坏语法）
           cat > app/src/main/java/com/xinghuishama/shenma/MainActivity.java << 'EOF'
           package com.xinghuishama.shenma;
 
@@ -129,7 +129,6 @@ jobs:
               }
           }
           EOF
-
 
       - name: Build with Gradle
         run: ./gradlew assembleDebug
