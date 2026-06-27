@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="Cache-Control" content="max-age=3600">
+<meta http-equiv="Cache-Control" content="max-age=3600">
 <meta name="description" content="神玛再现 · 杀码助手，支持频次分析、实时开奖、历史查询">
-<title>神码再现 v3.7.5 · 融合增强版</title>
+<title>神码再现 v3.7.6 · 融合增强版</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-/* ======================== style.css (基于 v3.7.4 修复) ======================== */
+/* ======================== style.css ======================== */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 body {
   font-family: 'Orbitron', system-ui, -apple-system, sans-serif;
@@ -39,6 +39,10 @@ body {
 .translate-y-20 { transform: translateY(5rem); }
 .transition-opacity { transition-property: opacity; transition-timing-function: ease; transition-duration: 300ms; }
 .duration-300 { transition-duration: 300ms; }
+
+/* 备用 spin 动画（CDN 加载失败时） */
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+.animate-spin { animation: spin 1s linear infinite; }
 
 /* 自定义布局类 */
 .dgrid-6 { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px; }
@@ -685,7 +689,7 @@ body {
   50% { opacity: 1; text-shadow: 0 0 40px rgba(0,255,0,0.8), 0 0 80px rgba(0,255,0,0.3); }
 }
 
-/* ======================== 设置按钮 & 下拉菜单（来自 v3.6.9） ======================== */
+/* ======================== 设置按钮 & 下拉菜单 ======================== */
 .settings-btn {
   position: absolute;
   top: 10px;
@@ -813,7 +817,7 @@ body {
   box-shadow: 0 0 6px rgba(0, 255, 234, 0.8);
 }
 
-/* ======================== Tailwind 备用类（v3.7.4） ======================== */
+/* ======================== Tailwind 备用类 ======================== */
 .relative { position: relative; }
 .fixed { position: fixed; }
 .sticky { position: sticky; }
@@ -943,7 +947,6 @@ body {
 <div id="main-app">
   <main class="relative z-10 max-w-4xl mx-auto p-3">
     <header class="relative overflow-hidden rounded-t-xl bg-gradient-to-r from-[#00ffea]/20 via-[#9d00ff]/20 to-[#ff0055]/20 border-b border-[#00ffea]/30 p-6 text-center">
-      <!-- 设置按钮 -->
       <button id="settingsBtn" class="settings-btn" aria-label="设置">
         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
       </button>
@@ -1025,7 +1028,7 @@ body {
 </div>
 
 <script>
-// ======================== data.js v3.7.5 ========================
+// ======================== data.js v3.7.6 ========================
 (function () {
   "use strict";
   const MAX_NUMBERS = 5000;
@@ -1046,6 +1049,9 @@ body {
   const WUXING_BASE_SEQ = ['金','金','土','土','木','木','火','火','金','金','水','水','木','木','火','火','土','土','水','水','木','木','金','金','土','土','水','水','火','火'];
   function generateWuxing(year) { const offset = year - 2023; const result = { '金':[],'木':[],'水':[],'火':[],'土':[] }; for (let n=1;n<=49;n++) { const wx = WUXING_BASE_SEQ[((n-1)%30 - offset + 30)%30]; result[wx].push(n); } return result; }
   function getNumberWuxing(num,year) { const idx=(num-1)%30; const offset=year-2023; return WUXING_BASE_SEQ[(idx-offset+30)%30]; }
+  // 别名，向后兼容
+  function getFive(num, year) { return getNumberWuxing(num, year); }
+
   const CURRENT_YEAR = (function() {
     const now = new Date();
     const utcMs = now.getTime() + now.getTimezoneOffset() * 60000;
@@ -1072,7 +1078,7 @@ body {
   window.APP_DATA={MAX_NUMBERS,SHENGXIAO,CATEGORIES,DUAN,numProps,ZODIAC_SEQUENCE,BASE_YEAR,generateShengxiaoMap,generateWuxing,getNumberWuxing,WUXING_BASE_SEQ};
 })();
 
-// ======================== app.js v3.7.5 (融合版) ========================
+// ======================== app.js v3.7.6 ========================
 (function () {
   "use strict";
 
@@ -1082,7 +1088,9 @@ body {
   const numProps = DATA.numProps || [];
   const RED_SET = new Set(DATA.CATEGORIES ? DATA.CATEGORIES.红波 : []);
   const BLUE_SET = new Set(DATA.CATEGORIES ? DATA.CATEGORIES.蓝波 : []);
-  const getFive = DATA.getNumberWuxing || function () { return "?"; };
+  // 使用合并后的函数
+  const getNumberWuxing = DATA.getNumberWuxing || function () { return "?"; };
+  const getFive = getNumberWuxing; // 别名
   const generateWuxingTable = DATA.generateWuxing || function () { return { "金":[],"木":[],"水":[],"火":[],"土":[] }; };
   const CURRENT_YEAR = (function() {
     const now = new Date();
@@ -1101,8 +1109,9 @@ body {
   const LS_HISTORY_KEY = "shenma_v4_history_cache";
   const LS_INPUT_KEY = "shenma_v4_input";
   const HISTORY_CACHE_MAX_AGE = 7 * 86400000;
+  const CACHE_MAX_YEARS = 3; // 只保留最近3年
 
-  // ========== 北京时间校准（腾讯云接口） ==========
+  // ========== 北京时间校准 ==========
   let timeOffset = 0;
 
   function getBeijingDate() {
@@ -1216,8 +1225,22 @@ body {
     } catch (e) { console.warn("loadState failed", e); }
   }
 
+  // 历史缓存 LRU：只保留最近 CACHE_MAX_YEARS 年
+  function pruneHistoryCache() {
+    const currentYear = getBeijingDate().getFullYear();
+    const years = Object.keys(historyCache).map(Number);
+    const validYears = years.filter(y => y >= currentYear - CACHE_MAX_YEARS);
+    for (const y of years) {
+      if (!validYears.includes(y)) {
+        delete historyCache[y];
+      }
+    }
+  }
+
   function saveHistoryCache() {
     try {
+      // 先修剪再保存
+      pruneHistoryCache();
       const keys = Object.keys(historyCache);
       if (keys.length === 0) return;
       const toSave = {};
@@ -1243,6 +1266,8 @@ body {
         if (Array.isArray(data) && data.length > 0) historyCache[year] = data;
       }
       if (parsed.lastYear) historyYearLoaded = parsed.lastYear;
+      // 加载后立即修剪
+      pruneHistoryCache();
     } catch (e) { console.warn("loadHistoryCache failed", e); }
   }
 
@@ -1272,6 +1297,7 @@ body {
     return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
   }
 
+  let truncToastShown = false; // 模块内变量替代 window._truncToastShown
   function showToast(msg) {
     const t = DOM.toast;
     if (!t) return;
@@ -1405,8 +1431,14 @@ body {
         if (DOM.numberWarn) {
           if (parsed.truncated) {
             DOM.numberWarn.classList.remove("hidden");
-            if (!window._truncToastShown) { showToast("⚠️ 输入号码超过" + MAX_NUMBERS + "个，已截断"); window._truncToastShown = true; setTimeout(() => window._truncToastShown = false, 2000); }
-          } else { DOM.numberWarn.classList.add("hidden"); }
+            if (!truncToastShown) {
+              showToast("⚠️ 输入号码超过" + MAX_NUMBERS + "个，已截断");
+              truncToastShown = true;
+              setTimeout(() => { truncToastShown = false; }, 2000);
+            }
+          } else {
+            DOM.numberWarn.classList.add("hidden");
+          }
         }
         const res = computeAnalysisMainThread(input, state.killNums, getFilterSet());
         lastRawCount = res.rawCount;
@@ -1662,21 +1694,14 @@ body {
     DOM.lotteryTime.textContent = "距开奖 " + String(h).padStart(2, "0") + ":" + String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0");
   }
 
+  // 统一使用 AbortController 的超时
   async function safeFetch(url, options = {}, retries = 2) {
     for (let i = 0; i <= retries; i++) {
       try {
-        let res;
-        if (typeof AbortController !== "undefined") {
-          const ctrl = new AbortController();
-          const tid = setTimeout(() => ctrl.abort(), options.timeout || 8000);
-          res = await fetch(url, { ...options, signal: ctrl.signal });
-          clearTimeout(tid);
-        } else {
-          res = await Promise.race([
-            fetch(url, options),
-            new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout")), options.timeout || 8000))
-          ]);
-        }
+        const ctrl = new AbortController();
+        const timeoutId = setTimeout(() => ctrl.abort(), options.timeout || 8000);
+        const res = await fetch(url, { ...options, signal: ctrl.signal });
+        clearTimeout(timeoutId);
         if (!res.ok) throw new Error("HTTP " + res.status);
         return res;
       } catch (e) {
@@ -1686,11 +1711,10 @@ body {
     }
   }
 
-  // ======================== 增强版波色标准化（来自 v3.6.9） ========================
+  // ======================== 增强版波色标准化 ========================
   function normalizeWaveToColor(waveRaw, num) {
     if (waveRaw !== undefined && waveRaw !== null && waveRaw !== "") {
       const w = String(waveRaw).trim().toLowerCase();
-      // 支持多格式：红/red/1, 绿/green/2, 蓝/blue/3，也支持“红波”等
       if (w.includes('红') || w === '1' || w === 'red') return 'red';
       if (w.includes('绿') || w === '2' || w === 'green') return 'green';
       if (w.includes('蓝') || w === '3' || w === 'blue') return 'blue';
@@ -1749,7 +1773,6 @@ body {
     const wavesRaw = String(item.wave || "").split(",").map(w => w.trim());
     const codes = codesRaw.filter(c => /^\d+$/.test(c) && Number(c) >= 1 && Number(c) <= 49);
     
-    // 同期待球数不变则跳过重建，避免闪烁
     if (lastLotteryPeriod === item.expect && DOM.lotteryBalls) {
       const existingBalls = DOM.lotteryBalls.querySelectorAll('.result-ball').length;
       if (existingBalls === codes.length && existingBalls > 0) {
@@ -1768,7 +1791,6 @@ body {
       isCurrentDrawComplete = false;
     }
     
-    // 为每个号码独立决定波色
     const colors = codes.map((code, idx) => {
       const num = parseInt(code, 10);
       const waveVal = idx < wavesRaw.length ? wavesRaw[idx] : "";
@@ -1988,39 +2010,39 @@ body {
         ].join("");
       }
     },
-  open(type) {
-    if (this.current === type) { this.close(); return; }
-    this.current = type;
-    const titles = { shama: "杀码", shengxiao: "生肖", haomatou: "头数", weishu: "尾数", shuduan: "数段", bose: "波色", wuxing: "五行", bandanshuang: "半单双", heshu: "合数", history: "历史开奖" };
-    DOM.drawer_title.textContent = titles[type] || "筛选器";
-    const contentDiv = DOM.drawer_content;
-    if (!contentDiv) { showToast("抽屉初始化失败"); return; }
-    contentDiv.innerHTML = this.templates[type] ? this.templates[type]() : "<p>暂无内容</p>";
-    DOM.drawer_overlay.classList.remove("hidden");
-    DOM.drawer_overlay.style.display = "block";
-    setTimeout(() => { DOM.drawer_overlay.classList.remove("opacity-0"); DOM.drawer_overlay.style.opacity = "1"; }, 10);
-    DOM.drawer_container.classList.add("open");
-    this.updateNavState(type);
-    if (type === "history") {
+    open(type) {
+      if (this.current === type) { this.close(); return; }
+      this.current = type;
+      const titles = { shama: "杀码", shengxiao: "生肖", haomatou: "头数", weishu: "尾数", shuduan: "数段", bose: "波色", wuxing: "五行", bandanshuang: "半单双", heshu: "合数", history: "历史开奖" };
+      DOM.drawer_title.textContent = titles[type] || "筛选器";
+      const contentDiv = DOM.drawer_content;
+      if (!contentDiv) { showToast("抽屉初始化失败"); return; }
+      contentDiv.innerHTML = this.templates[type] ? this.templates[type]() : "<p>暂无内容</p>";
+      DOM.drawer_overlay.classList.remove("hidden");
+      DOM.drawer_overlay.style.display = "block";
+      setTimeout(() => { DOM.drawer_overlay.classList.remove("opacity-0"); DOM.drawer_overlay.style.opacity = "1"; }, 10);
+      DOM.drawer_container.classList.add("open");
+      this.updateNavState(type);
+      if (type === "history") {
         const now = getBeijingDate();
         const currentYear = now.getFullYear();
         const today2135 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 21, 35, 0).getTime();
         const nowTs = now.getTime();
         let shouldClearCache = true;
         if (window._lastHistoryOpenTime) {
-            const lastTs = window._lastHistoryOpenTime;
-            if (lastTs < today2135 && nowTs < today2135) {
-                shouldClearCache = false;
-            }
+          const lastTs = window._lastHistoryOpenTime;
+          if (lastTs < today2135 && nowTs < today2135) {
+            shouldClearCache = false;
+          }
         }
         window._lastHistoryOpenTime = nowTs;
         if (shouldClearCache && historyCache[currentYear]) {
-            delete historyCache[currentYear];
-            saveHistoryCache();
+          delete historyCache[currentYear];
+          saveHistoryCache();
         }
         loadHistoryData(String(currentYear));
-    }
-},
+      }
+    },
     close() {
       DOM.drawer_container.classList.remove("open");
       DOM.drawer_overlay.classList.add("opacity-0");
@@ -2071,7 +2093,11 @@ body {
     if (!lastAnalysisResult) { showToast("暂无分析结果"); return; }
     let text = "";
     lastAnalysisResult.sortedFreqMap.forEach((nums, f) => { text += `${f}次：${nums.map(n => String(n).padStart(2, "0")).join(" ")}\n`; });
-    if (text.trim()) fallbackCopy(text.trim());
+    if (!text.trim()) {
+      showToast("暂无可复制内容");
+      return;
+    }
+    fallbackCopy(text.trim());
   }
   function copyNumber(n) { fallbackCopy(String(n).padStart(2, "0")); }
   function fallbackCopy(text) {
@@ -2230,7 +2256,7 @@ body {
         if (t.autoRefreshTimer) clearInterval(t.autoRefreshTimer);
         if (t.regularPollTimer) clearInterval(t.regularPollTimer);
       });
-      console.log("%c✅ 神码再现 v3.7.5 融合增强版已加载", "color:#00ffea;font-weight:bold");
+      console.log("%c✅ 神码再现 v3.7.6 融合增强版已加载", "color:#00ffea;font-weight:bold");
     } catch (e) { console.error("初始化失败:", e); }
   }
 
@@ -2241,7 +2267,7 @@ body {
   }
 })();
 
-// ======================== 设置菜单（来自 v3.6.9） ========================
+// ======================== 设置菜单 ========================
 (function () {
   "use strict";
   window.FREQ_ADJ_ENABLED = true;
@@ -2251,7 +2277,6 @@ body {
   const freqAdjToggle = document.getElementById('freqAdjToggle');
   const settingsTheme = document.getElementById('settingsTheme');
 
-  // 从 localStorage 恢复开关状态
   try {
     const saved = localStorage.getItem('shenma_freq_adj');
     if (saved !== null) {
@@ -2344,7 +2369,7 @@ body {
 
   if (settingsTheme) {
     settingsTheme.addEventListener('click', function () {
-      // 待开发，静默
+      // 待开发
     });
   }
 
