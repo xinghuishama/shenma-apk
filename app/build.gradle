@@ -10,8 +10,8 @@ android {
         applicationId "com.xinghuishama.shenma"
         minSdk 21
         targetSdk 34
-        versionCode 30704
-        versionName "3.7.4"
+        versionCode 30705
+        versionName "3.7.5"
     }
     buildTypes {
     debug {
