@@ -1653,7 +1653,7 @@ body {
 
         const label = document.createElement('span');
         label.className = "text-xs text-green-500 font-mono min-w-[30px] pt-2";
-        label.textContent = f + "次：";
+        label.textContent = String(f).padStart(2, "0") + "次：";
         row.appendChild(label);
 
         const ballsWrap = document.createElement('div');
@@ -1716,7 +1716,7 @@ body {
 
           const label = document.createElement('span');
           label.className = "text-xs text-gray-500 font-mono min-w-[30px] pt-2";
-          label.textContent = "0次：";
+          label.textContent = "00次：";
           row.appendChild(label);
 
           const ballsWrap = document.createElement('div');
