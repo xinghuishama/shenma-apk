@@ -1369,7 +1369,7 @@ body {
 
   function parseInputCount(input) {
     if (!input || !input.trim()) return { nums: [], truncated: false };
-    const cleaned = input.replace(/《[^》]*》/g, " ").replace(/[^\d鼠牛虎兔龍蛇馬羊猴雞狗豬鸡马龙猪\s]/g, " ").replace(/([鼠牛虎兔龍蛇馬羊猴雞狗豬])/g, " $1 ");
+    const cleaned = input.replace(/《[^》]*》/g, " ").replace(/[^\d鼠牛虎兔龍蛇馬羊猴雞狗豬鸡马龙猪\s]/g, " ").replace(/([鼠牛虎兔龍蛇馬羊猴雞狗豬鸡马龙猪])/g, " $1 ");
     const tokens = cleaned.split(/\s+/).filter(function(t) { return t.length > 0; });
     const results = [];
     for (let i = 0; i < tokens.length; i++) {
