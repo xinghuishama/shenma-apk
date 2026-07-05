@@ -3,18 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#080818">
+<link rel="manifest" href="manifest.json">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src *; img-src * data:;">
+<meta name="referrer" content="no-referrer-when-downgrade">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta http-equiv="Cache-Control" content="max-age=3600">
 <meta name="description" content="神玛再现 · 杀码助手，支持频次分析、实时开奖、历史查询">
-<title>神码再现 v3.7.6 · 融合增强版</title>
+<title>神码再现 v3.7.7 · 融合增强版</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
+<!-- Tailwind Play CDN 为 JIT 编译器，动态生成CSS，无法使用固定SRI --><script src="https://cdn.tailwindcss.com"></script>
 <style>
 /* ======================== style.css ======================== */
 :root {
   --ball-highlight: radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.95) 0%, transparent 30%);
   --ball-midlight: radial-gradient(circle at 50% 35%, rgba(255, 255, 255, 0.3) 0%, transparent 45%);
   --ball-shadow: inset -2px -2px 6px rgba(0,0,0,0.25), inset 2px 2px 6px rgba(255,255,255,0.35), 0 3px 10px rgba(0,0,0,0.25);
+  --light-bg-color: #050505;
+  --light-text-color: #ffffff;
+  --neon-cyan: #00f3ff;
+  --neon-pink: #ff0055;
+  --font-main: "Microsoft YaHei", "Heiti SC", sans-serif;
 }
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 body {
@@ -75,6 +84,7 @@ body {
 .dtruncate { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0; }
 
 .dbtn {
+  touch-action: manipulation;
   display: block; text-align: center; padding: 8px 0; background: #1a1a2a; border-radius: 8px;
   font-size: 14px; color: #9ca3af; border: 1px solid rgba(0,255,234,0.2); cursor: pointer;
   transition: all 0.2s; user-select: none;
@@ -94,6 +104,7 @@ body {
   padding: 12px 24px; background: #1a1a2a; color: #00ffea; border-radius: 16px; font-size: 14px;
   font-weight: 500; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
 }
+.dpage-btn { touch-action: manipulation; }
 .dpage-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 .dpage-btn:hover:not(:disabled) { background: rgba(0,255,234,0.1); }
 
@@ -198,8 +209,8 @@ body {
 }
 
 #result .ball-3d {
-  width: 34px;
-  height: 34px;
+  width: 35px;
+  height: 35px;
   font-size: 13px;
 }
 #result .ball-3d::after {
@@ -279,6 +290,7 @@ body {
   right: 0;
   z-index: 100;
   background: rgba(10, 10, 18, 0.25);
+  -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
   border-top: 1px solid rgba(0,255,234,0.4);
   padding: 8px;
@@ -296,7 +308,11 @@ body {
   border-radius: 8px;
   padding: 6px 12px;
   font-weight: 500;
+  -webkit-backdrop-filter: blur(2px);
   backdrop-filter: blur(2px);
+}
+.nav-item {
+  touch-action: manipulation;
 }
 .nav-item:active {
   transform: scale(0.96);
@@ -338,7 +354,7 @@ body {
 .lottery-card {
   background: transparent;
   border-radius: 24px;
-  padding: 18px;
+  padding: 12px;
   border: 1px solid rgba(0, 255, 234, 0.25);
 }
 
@@ -667,9 +683,8 @@ body {
 }
 
 .blackhole { will-change: width, height, opacity; }
-.distortion { will-change: transform, opacity; }
-.crack { will-change: width, opacity; border-radius: 1px; }
-.spark { will-change: transform, opacity; }
+/* .distortion, .crack, .spark removed — JS never creates elements with these classes */
+.blackhole { will-change: width, height, opacity; }
 
 /* 启动画面 */
 #splash-screen {
@@ -686,34 +701,8 @@ body {
   opacity: 0;
   pointer-events: none;
 }
-#splash-screen canvas#matrix {
-  width: 100vw;
-  height: 100vh;
-  background: #000;
-}
-#splash-screen { animation: autoHideSplash 4s ease-out forwards; }
-@keyframes autoHideSplash {
-  0%, 85% { opacity: 1; }
-  100% { opacity: 0; pointer-events: none; }
-}
-#splash-screen .splash-title {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: #0f0;
-  font-family: 'Orbitron', monospace;
-  font-size: 28px;
-  font-weight: bold;
-  text-shadow: 0 0 20px rgba(0,255,0,0.5);
-  z-index: 2;
-  letter-spacing: 8px;
-  animation: splashGlow 2s ease-in-out infinite;
-}
-@keyframes splashGlow {
-  0%, 100% { opacity: 0.7; text-shadow: 0 0 20px rgba(0,255,0,0.5); }
-  50% { opacity: 1; text-shadow: 0 0 40px rgba(0,255,0,0.8), 0 0 80px rgba(0,255,0,0.3); }
-}
+
+
 
 /* ======================== 设置按钮 & 下拉菜单 ======================== */
 .settings-btn {
@@ -734,6 +723,7 @@ body {
   transition: all 0.2s ease;
   -webkit-tap-highlight-color: transparent;
 }
+.settings-btn { touch-action: manipulation; }
 .settings-btn:active { transform: scale(0.92); }
 .settings-btn:hover { background: rgba(0, 255, 234, 0.1); }
 .settings-btn svg { width: 20px; height: 20px; }
@@ -964,16 +954,210 @@ body {
 .focus\:border-\[\#00ffea\]:focus { border-color: #00ffea; }
 .shadow-\[0_-10px_40px_rgba\(0\,0\,0\,0\.8\)\] { box-shadow: 0 -10px 40px rgba(0,0,0,0.8); }
 .shadow-\[0_0_20px_rgba\(0\,255\,234\,0\.3\)\] { box-shadow: 0 0 20px rgba(0,255,234,0.3); }
+
+/* ======================== 光影特效启动画面 ======================== */
+
+
+
+
+
+
+
+        /* 预加载容器 */
+        #loader-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);
+            transition: opacity 1s ease-in-out, visibility 1s;
+        }
+
+
+
+        /* 文字特效容器 */
+        .title-container {
+            position: relative;
+            font-size: 5rem;
+            font-weight: 900;
+            letter-spacing: 1rem;
+            text-transform: uppercase;
+            perspective: 500px;
+            cursor: default;
+            margin-bottom: 2rem;
+        }
+        @media (max-width: 768px) {
+            .title-container {
+                font-size: 2.2rem;
+                letter-spacing: 0.3rem;
+            }
+        }
+        @media (max-width: 400px) {
+            .title-container {
+                font-size: 1.8rem;
+                letter-spacing: 0.2rem;
+            }
+        }
+
+        /* 单个字符样式 */
+        .char {
+            position: relative;
+            display: inline-block;
+            color: #fff;
+            mix-blend-mode: lighten;
+            transition: color 0.3s;
+        }
+
+        /* 光影层 - 使用伪元素制造RGB色差和发光 */
+        .char::before,
+        .char::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-color); /* 遮挡 */
+            overflow: hidden;
+        }
+
+        /* 青色辉光层 */
+        .char::before {
+            left: 2px;
+            text-shadow: -2px 0 var(--neon-pink);
+            clip: rect(24px, 550px, 90px, 0);
+            animation: glitch-anim-2 3s infinite linear alternate-reverse;
+        }
+
+        /* 洋红色辉光层 */
+        .char::after {
+            left: -2px;
+            text-shadow: -2px 0 var(--neon-cyan);
+            clip: rect(85px, 550px, 140px, 0);
+            animation: glitch-anim 2.5s infinite linear alternate-reverse;
+        }
+
+        /* 中心高亮层（核心） */
+        .char-core {
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8),
+                         0 0 20px rgba(255, 255, 255, 0.4);
+        }
+
+        /* 鼠标跟随的聚光灯效果 - 通过JS更新CSS变量 */
+        .title-container::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(
+                circle at var(--x, 50%) var(--y, 50%), 
+                rgba(255, 255, 255, 0.15) 0%, 
+                transparent 50%
+            );
+            pointer-events: none;
+            z-index: 10;
+            mix-blend-mode: overlay;
+        }
+
+        /* 进度条样式 */
+        .progress-wrapper {
+            width: 300px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-pink));
+            width: 0%;
+            box-shadow: 0 0 10px var(--neon-cyan);
+            transition: width 0.1s linear;
+        }
+
+        .loading-text {
+            margin-top: 10px;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.5);
+            font-family: 'Courier New', monospace;
+        }
+
+        /* 故障动画关键帧 */
+        @keyframes glitch-anim {
+            0% { clip: rect(10px, 9999px, 30px, 0); }
+            20% { clip: rect(80px, 9999px, 100px, 0); }
+            40% { clip: rect(10px, 9999px, 50px, 0); }
+            60% { clip: rect(40px, 9999px, 60px, 0); }
+            80% { clip: rect(20px, 9999px, 90px, 0); }
+            100% { clip: rect(60px, 9999px, 80px, 0); }
+        }
+
+        @keyframes glitch-anim-2 {
+            0% { clip: rect(60px, 9999px, 80px, 0); }
+            20% { clip: rect(20px, 9999px, 90px, 0); }
+            40% { clip: rect(50px, 9999px, 10px, 0); }
+            60% { clip: rect(90px, 9999px, 20px, 0); }
+            80% { clip: rect(30px, 9999px, 60px, 0); }
+            100% { clip: rect(10px, 9999px, 40px, 0); }
+        }
+
+
+
+
+    
+
+/* ======================== 减少动画偏好适配 ======================== */
+@media (prefers-reduced-motion: reduce) {
+  .ball-3d,
+  .result-ball,
+  .flying-unique-ball,
+  .nav-item,
+  .settings-btn,
+  .dbtn,
+  .dpage-btn,
+  .refresh-btn-orange {
+    animation: none !important;
+    transition: none !important;
+  }
+  .drawer-mobile {
+    transition: none !important;
+  }
+  #splash-screen {
+    transition: none !important;
+    opacity: 0;
+    pointer-events: none;
+  }
+}
 </style>
 </head>
 <body class="mech-grid text-gray-300 overflow-x-hidden">
 
-<div id="splash-screen"><canvas id="matrix"></canvas><div class="splash-title">神码再现</div></div>
+<div id="splash-screen">
+      <div id="loader-screen">
+        <div class="title-container" id="text-scramble"></div>
+        <div class="progress-wrapper">
+          <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <div class="loading-text" id="loading-text">SYSTEM INITIALIZING... 0%</div>
+      </div>
+    </div>
 
 <div id="main-app">
   <main class="relative z-10 max-w-4xl mx-auto p-3">
     <header class="relative overflow-hidden rounded-t-xl bg-gradient-to-r from-[#00ffea]/20 via-[#9d00ff]/20 to-[#ff0055]/20 border-b border-[#00ffea]/30 p-6 text-center">
-      <button id="settingsBtn" class="settings-btn" aria-label="设置">
+      <button type="button" id="settingsBtn" class="settings-btn" aria-label="设置">
         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
       </button>
       <h1 class="relative z-10 text-3xl font-black bg-gradient-to-r from-[#00ffea] via-[#ff0055] to-[#9d00ff] bg-clip-text text-transparent tracking-wider">神码再现</h1>
@@ -987,13 +1171,13 @@ body {
         <div class="flex gap-3"><span>有效: <span id="charCount" class="text-[#00ffea] font-bold">0</span></span><span id="numberWarn" class="text-red-400 hidden">⚠️ 已截断至5000个</span></div>
       </div>
       <div class="flex gap-2 mt-4">
-        <button id="exampleBtn" aria-label="加载示例数据" class="flex-1 bg-transparent border border-[#00ffea]/50 text-[#00ffea] py-2 px-4 rounded-lg text-sm font-semibold hover:bg-[#00ffea]/10 transition-all active:scale-95 flex items-center justify-center gap-2"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 16 16"><path d="M13 3H3v2h10V3zm0 4H3v2h10V7zm0 4H3v2h10v-2z"/></svg>示例</button>
-        <button id="clearBtn" aria-label="清除输入内容" class="flex-1 bg-transparent border border-[#ff0055]/50 text-[#ff0055] py-2 px-4 rounded-lg text-sm font-semibold hover:bg-[#ff0055]/10 transition-all active:scale-95 flex items-center justify-center gap-2"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0a8 8 0 100 16A8 8 0 008 0zm3 10.5L10.5 12 8 9.5 5.5 12 5 10.5 7.5 8 5 5.5 5.5 4 8 6.5 10.5 4l.5 1.5L8.5 8z"/></svg>清除输入</button>
+        <button type="button" id="exampleBtn" aria-label="加载示例数据" class="flex-1 bg-transparent border border-[#00ffea]/50 text-[#00ffea] py-2 px-4 rounded-lg text-sm font-semibold hover:bg-[#00ffea]/10 transition-all active:scale-95 flex items-center justify-center gap-2"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 16 16"><path d="M13 3H3v2h10V3zm0 4H3v2h10V7zm0 4H3v2h10v-2z"/></svg>示例</button>
+        <button type="button" id="clearBtn" aria-label="清除输入内容" class="flex-1 bg-transparent border border-[#ff0055]/50 text-[#ff0055] py-2 px-4 rounded-lg text-sm font-semibold hover:bg-[#ff0055]/10 transition-all active:scale-95 flex items-center justify-center gap-2"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0a8 8 0 100 16A8 8 0 008 0zm3 10.5L10.5 12 8 9.5 5.5 12 5 10.5 7.5 8 5 5.5 5.5 4 8 6.5 10.5 4l.5 1.5L8.5 8z"/></svg>清除输入</button>
       </div>
     </section>
 
-    <section class="mt-4 border border-[#00ffea]/20 rounded-xl p-4">
-      <div class="flex justify-between items-center mb-4"><h2 class="text-lg font-bold bg-gradient-to-r from-[#00ffea] to-[#ff0055] bg-clip-text text-transparent">分析结果</h2><button id="copyResultBtn" aria-label="复制分析结果" class="bg-gradient-to-r from-[#00ff88]/80 to-emerald-600/80 text-black py-2 px-4 rounded-lg text-sm font-bold hover:shadow-[0_0_20px_rgba(0,255,136,0.6)] transition-all active:scale-95 flex items-center gap-2"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 16 16"><path d="M4 2v12h8v2H2V2h2zm10 0v12h2V2h-2zm-2 0H6v12h6V2z"/></svg>复制</button></div>
+    <section class="mt-4 border border-[#00ffea]/20 rounded-xl p-2">
+      <div class="flex justify-between items-center mb-4"><h2 class="text-lg font-bold bg-gradient-to-r from-[#00ffea] to-[#ff0055] bg-clip-text text-transparent">分析结果</h2><button type="button" id="copyResultBtn" aria-label="复制分析结果" class="bg-gradient-to-r from-[#00ff88]/80 to-emerald-600/80 text-black py-2 px-4 rounded-lg text-sm font-bold hover:shadow-[0_0_20px_rgba(0,255,136,0.6)] transition-all active:scale-95 flex items-center gap-2"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 16 16"><path d="M4 2v12h8v2H2V2h2zm10 0v12h2V2h-2zm-2 0H6v12h6V2z"/></svg>复制</button></div>
       <div id="result" class="min-h-[200px]"><div class="flex flex-col items-center justify-center py-12 text-gray-500"><svg class="w-20 h-20 mb-4 opacity-50" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" stroke="#00ffea" stroke-width="2" fill="none" stroke-dasharray="5,5"/><path d="M30 50l15 15 25-30" stroke="#00ffea" stroke-width="3" fill="none" stroke-linecap="round"/></svg><p>输入号码启动分析</p></div></div>
     </section>
 
@@ -1001,7 +1185,7 @@ body {
       <div class="flex justify-between items-start mb-4"><div><div class="text-gray-400 text-sm mb-1">第 <span id="lotteryPeriod" class="text-gray-300">--</span> 期</div></div><div class="text-right"><div class="text-gray-400 text-sm mb-1">开奖时间</div><div id="lotteryTime" class="text-gray-300 text-sm">--</div><div id="lastRefreshTime" class="text-xs text-gray-500 mt-1"></div></div></div>
       <div class="border-t border-gray-700/50 my-4"></div>
       <div id="lotteryBalls" class="flex justify-center flex-wrap gap-1"></div>
-      <button id="refreshLotteryBtn" aria-label="刷新开奖数据" class="refresh-btn-orange"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>刷新数据</button>
+      <button type="button" id="refreshLotteryBtn" aria-label="刷新开奖数据" class="refresh-btn-orange"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>刷新数据</button>
     </section>
 
     <footer class="mt-6 text-center text-xs text-gray-600 tracking-widest pb-4">杀码助手仅供港澳居民使用</footer>
@@ -1010,23 +1194,23 @@ body {
   <!-- 底部导航 -->
   <nav class="bottom-nav">
     <div class="flex gap-1 overflow-x-auto hide-scrollbar">
-      <button class="nav-item" data-drawer="shama" aria-label="杀码筛选">杀码</button>
-      <button class="nav-item" data-drawer="shengxiao" aria-label="生肖筛选">生肖</button>
-      <button class="nav-item" data-drawer="haomatou" aria-label="头数筛选">头数</button>
-      <button class="nav-item" data-drawer="weishu" aria-label="尾数筛选">尾数</button>
-      <button class="nav-item" data-drawer="shuduan" aria-label="数段筛选">数段</button>
-      <button class="nav-item" data-drawer="bose" aria-label="波色筛选">波色</button>
-      <button class="nav-item" data-drawer="wuxing" aria-label="五行筛选">五行</button>
-      <button class="nav-item" data-drawer="heshu" aria-label="合数筛选">合数</button>
-      <button class="nav-item" data-drawer="bandanshuang" aria-label="单双筛选">单双</button>
-      <button class="nav-item" data-drawer="history" aria-label="历史开奖">历史</button>
-      <button class="nav-item" data-drawer="selectnone" aria-label="清空所有筛选">清空</button>
+      <button type="button" class="nav-item" data-drawer="shama" aria-label="杀码筛选">杀码</button>
+      <button type="button" class="nav-item" data-drawer="shengxiao" aria-label="生肖筛选">生肖</button>
+      <button type="button" class="nav-item" data-drawer="haomatou" aria-label="头数筛选">头数</button>
+      <button type="button" class="nav-item" data-drawer="weishu" aria-label="尾数筛选">尾数</button>
+      <button type="button" class="nav-item" data-drawer="shuduan" aria-label="数段筛选">数段</button>
+      <button type="button" class="nav-item" data-drawer="bose" aria-label="波色筛选">波色</button>
+      <button type="button" class="nav-item" data-drawer="wuxing" aria-label="五行筛选">五行</button>
+      <button type="button" class="nav-item" data-drawer="heshu" aria-label="合数筛选">合数</button>
+      <button type="button" class="nav-item" data-drawer="bandanshuang" aria-label="单双筛选">单双</button>
+      <button type="button" class="nav-item" data-drawer="history" aria-label="历史开奖">历史</button>
+      <button type="button" class="nav-item" data-drawer="selectnone" aria-label="清空所有筛选">清空</button>
     </div>
   </nav>
 
   <div id="drawer-overlay" class="fixed inset-0 bg-black/30 z-40 hidden opacity-0 transition-opacity duration-300"></div>
   <div id="drawer-container" class="fixed inset-x-0 bottom-0 z-50 drawer-mobile bg-[#0a0a12] border-t-2 border-[#00ffea] rounded-t-2xl max-h-[90vh] overflow-y-auto shadow-[0_-10px_40px_rgba(0,0,0,0.8)]">
-    <div class="sticky top-0 bg-[#0a0a12] border-b border-[#00ffea]/30 p-2 flex justify-between items-center z-10"><h3 id="drawer-title" class="text-[#00ffea] font-bold text-lg">筛选器</h3><button id="drawer-close" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#00ffea]/20 text-[#00ffea] transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button></div>
+    <div class="sticky top-0 bg-[#0a0a12] border-b border-[#00ffea]/30 p-2 flex justify-between items-center z-10"><h3 id="drawer-title" class="text-[#00ffea] font-bold text-lg">筛选器</h3><button type="button" id="drawer-close" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#00ffea]/20 text-[#00ffea] transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button></div>
     <div id="drawer-content" class="p-4 space-y-4 pb-20 bg-[#0a0a12]"></div>
   </div>
   <div id="toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 bg-[#0a0a12] border border-[#00ffea]/30 text-[#00ffea] px-6 py-3 rounded-lg shadow-[0_0_20px_rgba(0,255,234,0.3)] transform translate-y-20 opacity-0 transition-all duration-300 z-[200] pointer-events-none"></div>
@@ -1054,7 +1238,7 @@ body {
 </div>
 
 <script>
-// ======================== data.js v3.7.6 ========================
+// ======================== data.js v3.7.7 ========================
 (function () {
   "use strict";
   const MAX_NUMBERS = 5000;
@@ -1108,9 +1292,67 @@ body {
   window.APP_DATA={MAX_NUMBERS,SHENGXIAO,CATEGORIES,DUAN,numProps,ZODIAC_SEQUENCE,BASE_YEAR,generateShengxiaoMap,generateWuxing,getNumberWuxing,WUXING_BASE_SEQ};
 })();
 
-// ======================== app.js v3.7.6 ========================
+// ======================== app.js v3.7.7 ========================
 (function () {
   "use strict";
+
+  // ======================== requestAnimationFrame 前缀兼容 ========================
+  window.requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function(cb) { return setTimeout(cb, 16); };
+  window.cancelAnimationFrame = window.cancelAnimationFrame || window.webkitCancelAnimationFrame || window.mozCancelAnimationFrame || function(id) { clearTimeout(id); };
+
+  // ======================== 兼容性检查 ========================
+  // ======================== 兼容性检查 ========================
+  if (typeof Promise === 'undefined' || typeof fetch === 'undefined') {
+    document.body.innerHTML = '<div style="text-align:center;padding:40px 20px;color:#f87171;font-family:sans-serif;"><h2>浏览器版本过低</h2><p>请使用支持 Promise 和 fetch 的现代浏览器（Chrome 45+, Safari 10.1+, Firefox 40+, iOS 10.3+）</p></div>';
+    throw new Error('Browser does not support Promise or fetch');
+  }
+
+  // ======================== 安全localStorage包装 ========================
+  function safeSetItem(key, value) {
+    try {
+      localStorage.setItem(key, value);
+      return true;
+    } catch (e) {
+      if (e.name === 'QuotaExceededError' || e.code === 22) {
+        try {
+          for (let i = localStorage.length - 1; i >= 0; i--) {
+            const k = localStorage.key(i);
+            if (k && k.startsWith('shenma_') && k !== key) {
+              localStorage.removeItem(k);
+            }
+          }
+          localStorage.setItem(key, value);
+          return true;
+        } catch (retryErr) {}
+        console.warn('[localStorage] 存储已满:', key);
+      }
+      return false;
+    }
+  }
+
+
+  // ======================== 全局错误监听 ========================
+  (function initErrorTracking() {
+    window.addEventListener('error', function(e) {
+      console.error('[全局错误]', e.message, 'at', e.filename + ':' + e.lineno, e.error);
+    });
+    window.addEventListener('unhandledrejection', function(e) {
+      console.error('[未处理Promise拒绝]', e.reason);
+    });
+  })();
+
+  // ======================== 在线状态检测 ========================
+  (function initOnlineTracking() {
+    function updateOnlineStatus() {
+      if (!navigator.onLine) {
+        showToast("⚠️ 网络已断开，部分功能可能不可用");
+      } else {
+        showToast("🟢 网络已恢复");
+      }
+    }
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+  })();
 
   const DATA = window.APP_DATA || {};
   const MAX_NUMBERS = DATA.MAX_NUMBERS || 5000;
@@ -1161,7 +1403,7 @@ body {
       const json = JSON.parse(text.replace(/^QZOutputJson=/, '').replace(/;?$/, ''));
       const serverTime = json.t * 1000;
       timeOffset = serverTime - Date.now();
-      console.log('✅ 北京时间同步成功，偏移量:', timeOffset, 'ms');
+      // console.log('✅ 北京时间同步成功，偏移量:', timeOffset, 'ms');
     } catch (e) {
       console.warn('⏰ 时间同步失败，将使用本地时间，可能影响开奖窗口判断', e);
       timeOffset = 0;
@@ -1172,6 +1414,22 @@ body {
   const DRAW_START_HOUR = 21, DRAW_START_MINUTE = 33, DRAW_START_SECOND = 25;
   const DRAW_END_HOUR = 21, DRAW_END_MINUTE = 34, DRAW_END_SECOND = 30;
   const DRAW_POLL_MS = 2000, DRAW_REGULAR_MS = 60000;
+
+  // ======================== 动画/交互时间常量 ========================
+  const ROLL_DURATION_MS = 900;
+  const ROLL_INTERVAL_MS = 60;
+  const BALL_STAGGER_MS = 80;
+  const DEBOUNCE_MS = 200;
+  const BALL_APPEAR_DELAY_MS = 150;
+  const SPLASH_DURATION_MS = 3000;
+  const DRAW_WINDOW_CHECK_MS = 4000;
+  const TRAIL_DURATION_MS = 500;
+  const JET_DURATION_MS = 600;
+  const GEAR_SPIN_MS = 600;
+  const FADE_OUT_DELAY_MS = 800;
+  const BLACKHOLE_DURATION_MS = 4000;
+  const TOAST_DURATION_MS = 2000;
+  const FLY_PHASE1_MS = 2000;
   const DRAW_CONFIG = {
     startH: DRAW_START_HOUR, startM: DRAW_START_MINUTE, startS: DRAW_START_SECOND,
     endH: DRAW_END_HOUR, endM: DRAW_END_MINUTE, endS: DRAW_END_SECOND,
@@ -1238,7 +1496,7 @@ body {
 
   function saveState() {
     try {
-      localStorage.setItem(LS_KEY, JSON.stringify({ killNums: state.killNums, selectedFilters: state.selectedFilters, _t: Date.now() }));
+      safeSetItem(LS_KEY, JSON.stringify({ killNums: state.killNums, selectedFilters: state.selectedFilters, _t: Date.now() }));
     } catch (e) {}
   }
   function loadState() {
@@ -1282,7 +1540,7 @@ body {
         const data = historyCache[k];
         if (data && data.length > 0) toSave[k] = data;
       }
-      localStorage.setItem(LS_HISTORY_KEY, JSON.stringify({ cache: toSave, lastYear: historyYearLoaded || "", _t: Date.now() }));
+      safeSetItem(LS_HISTORY_KEY, JSON.stringify({ cache: toSave, lastYear: historyYearLoaded || "", _t: Date.now() }));
     } catch (e) {}
   }
   function loadHistoryCache() {
@@ -1307,7 +1565,7 @@ body {
   function saveInputCache() {
     try {
       const val = DOM.numbers ? DOM.numbers.value : "";
-      if (val && val.trim()) localStorage.setItem(LS_INPUT_KEY, JSON.stringify({ value: val, _t: Date.now() }));
+      if (val && val.trim()) safeSetItem(LS_INPUT_KEY, JSON.stringify({ value: val, _t: Date.now() }));
       else localStorage.removeItem(LS_INPUT_KEY);
     } catch (e) {}
   }
@@ -1348,7 +1606,7 @@ body {
       t.classList.add("translate-y-20", "opacity-0");
       t.style.transform = "translateY(5rem)";
       t.style.opacity = "0";
-    }, 2000);
+    }, TOAST_DURATION_MS);
   }
 
   // ======================== 输入解析 ========================
@@ -1483,7 +1741,7 @@ body {
         lastRawCount = res.rawCount;
         renderResult(res.adjustedCount, res.adjustedTotal, res.unique, res.hitCounts, res.rawCount);
       } catch (err) { console.error("runAnalysis error:", err); }
-    }, 200);
+    }, DEBOUNCE_MS);
   }
   function onStateChange() { runAnalysis(); saveState(); saveInputCache(); }
 
@@ -1533,7 +1791,7 @@ body {
       { width: '100px', height: '100px', opacity: 0.9, offset: 0.5 },
       { width: '80px', height: '80px', opacity: 0.9, offset: 0.7 },
       { width: '0px', height: '0px', opacity: 0 }
-    ], { duration: 4000, easing: 'ease-in-out' });
+    ], { duration: BLACKHOLE_DURATION_MS, easing: 'ease-in-out' });
     bhAnim.onfinish = function() { blackhole.remove(); disk.remove(); };
     const ball = document.createElement("div");
     ball.className = "flying-unique-ball " + colorClass;
@@ -1541,7 +1799,7 @@ body {
     ball.style.cssText = "position:fixed;left:" + endX + "px;top:" + endY + "px;transform:translate(-50%,-50%) scale(1);z-index:10000;";
     document.body.appendChild(ball);
     const startTime = performance.now();
-    const phase1Duration = 2000;
+    const phase1Duration = FLY_PHASE1_MS;
     function phase1(now) {
       const progress = Math.min((now - startTime) / phase1Duration, 1);
       const ease = progress < 0.5 ? 4 * progress * progress * progress : 1 - Math.pow(-2 * progress + 2, 3) / 2;
@@ -1560,7 +1818,7 @@ body {
         trail.animate([
           { transform: 'translate(-50%,-50%) scale(1)', opacity: 0.6 },
           { transform: 'translate(-50%,-50%) scale(0)', opacity: 0 }
-        ], { duration: 500 }).onfinish = function() { trail.remove(); };
+        ], { duration: TRAIL_DURATION_MS }).onfinish = function() { trail.remove(); };
       }
       if (progress < 1) {
         activeFlyAnim = requestAnimationFrame(phase1);
@@ -1595,7 +1853,7 @@ body {
         jet.animate([
           { transform: 'translate(-50%,-50%) scale(1)', opacity: 1 },
           { transform: 'translate(' + (Math.cos(jetAngle)*jetDist) + 'px,' + (Math.sin(jetAngle)*jetDist) + 'px) scale(0)', opacity: 0 }
-        ], { duration: 600 }).onfinish = function() { jet.remove(); };
+        ], { duration: JET_DURATION_MS }).onfinish = function() { jet.remove(); };
       }
       if (progress < 1) {
         activeFlyAnim = requestAnimationFrame(phase2);
@@ -1815,6 +2073,7 @@ body {
   let inDrawWindowFlag = false;
   let lastDrawFetchTime = 0;
   let lastRegularFetchTime = 0;
+  let _rollTimer = null; // 摇奖滚动动画防重入
 
   function checkDrawComplete(item) {
     if (!item || !item.openCode) return false;
@@ -1896,7 +2155,7 @@ body {
         throw new Error("Invalid lottery data structure: missing expect or openCode");
       }
       if (!item.openCode || typeof item.openCode !== "string") { showToast("数据字段不完整"); return; }
-      try { localStorage.setItem(LS_CACHE_KEY, JSON.stringify({ data, time: Date.now() })); } catch (e) {}
+      try { safeSetItem(LS_CACHE_KEY, JSON.stringify({ data, time: Date.now() })); } catch (e) {}
       const isNewPeriod = lastLotteryPeriod !== item.expect;
       if (isNewPeriod) {
         lastLotteryPeriod = item.expect;
@@ -1924,29 +2183,76 @@ body {
     }
   }
 
+  // ======================== 号码球数字滚动动画（摇奖机效果） ========================
+  function rollBallNumbers(duration) {
+    if (_rollTimer) return; // 防重入：避免连续点击导致多个定时器叠加
+
+    const ballItems = DOM.lotteryBalls.querySelectorAll('.result-ball');
+    if (ballItems.length === 0) return;
+
+    // 先停掉球的入场动画，让球静止可见
+    ballItems.forEach(function(ball) {
+      ball.style.animation = 'none';
+      ball.style.opacity = '1';
+      ball.style.transform = 'scale(1) rotate(0deg)';
+    });
+
+    // 用 setInterval（每 60ms）让每个球的数字在 01-49 之间快速随机滚动
+    const rollInterval = setInterval(function() {
+      ballItems.forEach(function(ball) {
+        const randomNum = Math.floor(Math.random() * 49) + 1;
+        // 只更新数字文本节点（第一个子节点），保留 meta 信息
+        const textNode = ball.childNodes[0];
+        if (textNode && textNode.nodeType === 3 /* Node.TEXT_NODE */) {
+          textNode.textContent = String(randomNum).padStart(2, '0');
+        }
+      });
+    }, ROLL_INTERVAL_MS);
+
+    _rollTimer = rollInterval;
+
+    // duration（900ms）后停止滚动，定格到最终数字
+    setTimeout(function() {
+      clearInterval(rollInterval);
+      _rollTimer = null;
+
+      // 恢复每个球的最终数字
+      ballItems.forEach(function(ball) {
+        const finalNum = ball.dataset.finalNum;
+        if (finalNum) {
+          const textNode = ball.childNodes[0];
+          if (textNode && textNode.nodeType === 3 /* Node.TEXT_NODE */) {
+            textNode.textContent = finalNum;
+          }
+        }
+      });
+
+      // 逐个触发 ballAppear 弹跳入场动画（间隔 80ms）
+      ballItems.forEach(function(ball, idx) {
+        setTimeout(function() {
+          // 强制重排以重新触发动画
+          ball.style.animation = '';
+          void ball.offsetHeight;
+          ball.style.animation = 'ballAppear 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards';
+        }, idx * BALL_STAGGER_MS);
+      });
+    }, duration);
+  }
+
   function renderLottery(item) {
     const codesRaw = String(item.openCode || "").split(",").map(c => c.trim());
     const wavesRaw = String(item.wave || "").split(",").map(w => w.trim());
     const codes = codesRaw.filter(c => /^\d+$/.test(c) && Number(c) >= 1 && Number(c) <= 49);
-    
-    if (lastLotteryPeriod === item.expect && DOM.lotteryBalls) {
-      const existingBalls = DOM.lotteryBalls.querySelectorAll('.result-ball').length;
-      if (existingBalls === codes.length && existingBalls > 0) {
-        if (DOM.lotteryPeriod) DOM.lotteryPeriod.textContent = escapeHtml(item.expect || "--");
-        if (DOM.lotteryTime) {
-          const rawTime = item.openTime || "--";
-          const timeStr = typeof rawTime === 'string' ? rawTime.replace(" ", "\n") : String(rawTime);
-          DOM.lotteryTime.textContent = escapeHtml(timeStr);
-        }
-        return;
-      }
+
+    // 更新期号和时间显示（两条路径都更新）
+    if (DOM.lotteryPeriod) DOM.lotteryPeriod.textContent = escapeHtml(item.expect || "--");
+    if (DOM.lotteryTime) {
+      const rawTime = item.openTime || "--";
+      const timeStr = typeof rawTime === 'string' ? rawTime.replace(" ", "\n") : String(rawTime);
+      DOM.lotteryTime.textContent = escapeHtml(timeStr);
     }
-    
-    if (lastLotteryPeriod !== item.expect) {
-      lastLotteryPeriod = item.expect;
-      isCurrentDrawComplete = false;
-    }
-    
+
+    // 计算颜色、生肖、五行（两条路径共享）
     const colors = codes.map((code, idx) => {
       const num = parseInt(code, 10);
       const waveVal = idx < wavesRaw.length ? wavesRaw[idx] : "";
@@ -1957,21 +2263,54 @@ body {
       if (isNaN(n) || n < 1 || n > 49) return "";
       return (numProps[n] && numProps[n].shengXiao) || "";
     });
+    const wxClassMap = { "金": "wx-gold", "木": "wx-wood", "水": "wx-water", "火": "wx-fire", "土": "wx-earth" };
+    const lotteryYear = getBeijingDate().getFullYear();
+
+    // 缓存命中路径：期号相同且球数相同 → 不重建 DOM，直接触发滚动动画
+    const existingBalls = DOM.lotteryBalls ? DOM.lotteryBalls.querySelectorAll('.result-ball').length : 0;
+    if (lastLotteryPeriod === item.expect && existingBalls === codes.length && existingBalls > 0) {
+      rollBallNumbers(ROLL_DURATION_MS);
+      return;
+    }
+
+    // 新期号或球数变化：重建 DOM
+    if (lastLotteryPeriod !== item.expect) {
+      lastLotteryPeriod = item.expect;
+      isCurrentDrawComplete = false;
+    }
+
     const container = DOM.lotteryBalls;
     if (!container) return;
     container.className = "result-balls-row";
     container.innerHTML = "";
-    const wxClassMap = { "金": "wx-gold", "木": "wx-wood", "水": "wx-water", "火": "wx-fire", "土": "wx-earth" };
-    const lotteryYear = getBeijingDate().getFullYear();
+
+    // helper：创建一个球，初始状态无动画、静止可见，保存最终数字到 data-final-num
+    function createBall(num, colorClass, zodiac, wx, idx) {
+      const div = document.createElement("div");
+      div.className = "result-ball-item";
+      const ball = document.createElement("div");
+      ball.className = "result-ball " + colorClass;
+      // 初始状态：无入场动画，静止可见
+      ball.style.animation = "none";
+      ball.style.opacity = "1";
+      ball.style.transform = "scale(1)";
+      ball.dataset.finalNum = codes[idx].padStart(2, "0");
+      // 数字文本节点（第一个子节点）
+      ball.appendChild(document.createTextNode(codes[idx].padStart(2, "0")));
+      // meta 信息
+      const meta = document.createElement("div");
+      meta.className = "result-ball-meta";
+      meta.innerHTML = escapeHtml(zodiac) + '<span class="' + escapeHtml(wxClassMap[wx] || "") + '">' + escapeHtml(wx) + '</span>';
+      ball.appendChild(meta);
+      div.appendChild(ball);
+      return div;
+    }
+
     for (let i = 0; i < 6 && i < codes.length; i++) {
       const num = parseInt(codes[i], 10);
       const colorClass = { red: "result-ball-red", green: "result-ball-green", blue: "result-ball-blue" }[colors[i]] || "result-ball-blue";
       const wx = (num >= 1 && num <= 49) ? (getFive(num, lotteryYear) || "?") : "?";
-      const wxCls = wxClassMap[wx] || "";
-      const div = document.createElement("div");
-      div.className = "result-ball-item";
-      div.innerHTML = '<div class="result-ball ' + colorClass + '" style="animation-delay: ' + (i * 150) + 'ms">' + escapeHtml(codes[i].padStart(2, "0")) + '<div class="result-ball-meta">' + escapeHtml(zodiacs[i]) + '<span class="' + wxCls + '">' + wx + '</span></div></div>';
-      container.appendChild(div);
+      container.appendChild(createBall(num, colorClass, zodiacs[i], wx, i));
     }
     if (codes.length >= 7) {
       const plus = document.createElement("div");
@@ -1981,21 +2320,12 @@ body {
       const num = parseInt(codes[6], 10);
       const colorClass = { red: "result-ball-red", green: "result-ball-green", blue: "result-ball-blue" }[colors[6]] || "result-ball-blue";
       const wx = (num >= 1 && num <= 49) ? (getFive(num, lotteryYear) || "?") : "?";
-      const wxCls = wxClassMap[wx] || "";
-      const div = document.createElement("div");
-      div.className = "result-ball-item";
-      div.innerHTML = `<div class="result-ball ${colorClass}" style="animation-delay: ${6 * 150}ms">${escapeHtml(codes[6].padStart(2, "0"))}<div class="result-ball-meta">${escapeHtml(zodiacs[6])}<span class="${wxCls}">${wx}</span></div></div>`;
-      container.appendChild(div);
+      container.appendChild(createBall(num, colorClass, zodiacs[6], wx, 6));
     }
     void container.offsetHeight;
-    if (DOM.lotteryPeriod) {
-      DOM.lotteryPeriod.textContent = escapeHtml(item.expect || "--");
-    }
-    if (DOM.lotteryTime) {
-      const rawTime = item.openTime || "--";
-      const timeStr = typeof rawTime === 'string' ? rawTime.replace(" ", "\n") : String(rawTime);
-      DOM.lotteryTime.textContent = escapeHtml(timeStr);
-    }
+
+    // 两条路径都触发：新渲染后也调用摇奖滚动动画
+    rollBallNumbers(ROLL_DURATION_MS);
   }
 
   // ========== 历史记录 ==========
@@ -2158,9 +2488,9 @@ body {
             '<div id="historyLoading" class="dhidden dtext-center dpy-4"><svg class="animate-spin" style="width:24px;height:24px;margin:0 auto;color:#00ffea;" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg></div>',
             '<div id="historyContent" class="dmt-3 hide-scrollbar"></div>',
             '<div id="historyPagination" class="dflex-between dmt-6 dpx-1 dhidden">',
-              '<button id="history-prev" class="dpage-btn">← 上1页</button>',
+              '<button type="button" id="history-prev" class="dpage-btn">← 上1页</button>',
               '<div class="dtext-sm" style="text-align:center;">第 <span id="historyPageNum" style="font-weight:bold;color:#00ffea;">1</span> 页 / <span id="historyTotalPages" class="dtext-gray">1</span> 页</div>',
-              '<button id="history-next" class="dpage-btn">下1页 →</button>',
+              '<button type="button" id="history-next" class="dpage-btn">下1页 →</button>',
             '</div>',
           '</div>'
         ].join("");
@@ -2173,6 +2503,7 @@ body {
       DOM.drawer_title.textContent = titles[type] || "筛选器";
       const contentDiv = DOM.drawer_content;
       if (!contentDiv) { showToast("抽屉初始化失败"); return; }
+      // DrawerSystem 模板均为静态字符串，无用户输入，XSS风险可控
       contentDiv.innerHTML = this.templates[type] ? this.templates[type]() : "<p>暂无内容</p>";
       DOM.drawer_overlay.classList.remove("hidden");
       DOM.drawer_overlay.style.display = "block";
@@ -2275,8 +2606,8 @@ body {
     updateCountdown();
     countdownTimer = setInterval(updateCountdown, 1000);
     checkDrawWindow();
-    autoRefreshTimer = setInterval(checkDrawWindow, 4000);
-    const regularPollTimer = setInterval(regularPoll, 10000);
+    autoRefreshTimer = setInterval(checkDrawWindow, DRAW_WINDOW_CHECK_MS);
+    const regularPollTimer = setInterval(regularPoll, REGULAR_POLL_MS);
 
     const _onForeground = function() {
       setTimeout(function() { fetchLottery(); }, 300);
@@ -2294,7 +2625,7 @@ body {
     const wasInWindow = inDrawWindowFlag;
     inDrawWindowFlag = isInDrawWindow();
     if (inDrawWindowFlag && !wasInWindow) {
-      console.log('[开奖时段] 进入关键窗口，启用2秒高频刷新');
+      // console.log('[开奖时段] 进入关键窗口，启用2秒高频刷新');
       fetchLottery();
       lastDrawFetchTime = Date.now();
       return;
@@ -2320,66 +2651,118 @@ body {
   // ======================== 启动画面 ========================
   function initSplashScreen() {
     const splash = document.getElementById('splash-screen');
-    let matrixInterval = null;
     let switched = false;
     function switchToMain() {
       if (switched) return;
       switched = true;
-      if (matrixInterval) clearInterval(matrixInterval);
       if (!splash) return;
       splash.style.animation = 'none';
       splash.style.opacity = '0';
-      splash.style.transition = 'opacity 0.6s ease-out';
+      splash.style.transition = 'opacity 0.8s ease-out';
       splash.style.pointerEvents = 'none';
       setTimeout(function() {
         splash.style.display = 'none';
         try { window.dispatchEvent(new Event('resize')); } catch(e) {}
-      }, 600);
+      }, 800);
     }
-    splash.addEventListener('click', switchToMain);
-    splash.addEventListener('touchstart', switchToMain);
-    
-    const matrixCanvas = document.getElementById('matrix');
-    let mctx = null, mWidth, mHeight, mColumns, mDrops = [];
-    const mFontSize = 14;
-    const mChars = '0123456789ABCDEF';
-    
-    function resizeMatrix() {
-      if (!matrixCanvas) return;
-      mWidth = window.innerWidth || 360;
-      mHeight = window.innerHeight || 640;
-      matrixCanvas.width = mWidth;
-      matrixCanvas.height = mHeight;
-      mctx = matrixCanvas.getContext('2d');
-      mColumns = Math.floor(mWidth / mFontSize);
-      mDrops = [];
-      for (let c = 0; c < mColumns; c++) mDrops[c] = Math.floor(Math.random() * 20);
+    // 强制超时：无论进度如何，最多5秒后必定进入主程序
+    const forceTimeout = setTimeout(function() {
+      if (!switched) {
+        console.warn('[启动画面] 强制超时进入主程序');
+        switchToMain();
+      }
+    }, 5000);
+
+    // 光影特效启动画面逻辑
+    const finalText = "神码再现";
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%^&*";
+    const textContainer = document.getElementById('text-scramble');
+    const progressBar = document.getElementById('progress-bar');
+    const loadingText = document.getElementById('loading-text');
+    let isLoaded = false;
+
+    function initText() {
+      if (!textContainer) return;
+      textContainer.innerHTML = '';
+      finalText.split('').forEach((char) => {
+        const span = document.createElement('span');
+        span.className = 'char';
+        span.setAttribute('data-text', char);
+        const core = document.createElement('span');
+        core.className = 'char-core';
+        core.textContent = char;
+        span.appendChild(core);
+        textContainer.appendChild(span);
+      });
     }
-    
-    function drawMatrix() {
-      if (!mctx) return;
-      mctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-      mctx.fillRect(0, 0, mWidth, mHeight);
-      mctx.fillStyle = '#0f0';
-      mctx.font = mFontSize + 'px monospace';
-      for (let i = 0; i < mDrops.length; i++) {
-        const char = mChars[Math.floor(Math.random() * mChars.length)];
-        mctx.fillText(char, i * mFontSize, mDrops[i] * mFontSize);
-        if (mDrops[i] * mFontSize > mHeight && Math.random() > 0.975) {
-          mDrops[i] = 0;
+
+    function animateText() {
+      const coreSpans = document.querySelectorAll('.char-core');
+      let animationFrame = 0;
+      const totalFrames = 60;
+      function step() {
+        coreSpans.forEach((span, index) => {
+          if (animationFrame > index * 5) {
+            if (animationFrame < totalFrames) {
+              span.textContent = chars[Math.floor(Math.random() * chars.length)];
+            } else {
+              span.textContent = finalText[index];
+            }
+          }
+        });
+        animationFrame++;
+        if (animationFrame <= totalFrames + 10) {
+          requestAnimationFrame(step);
+        } else {
+          coreSpans.forEach((span, index) => span.textContent = finalText[index]);
         }
-        mDrops[i]++;
       }
+      step();
     }
-    
-    try {
-      if (matrixCanvas && matrixCanvas.getContext) {
-        resizeMatrix();
-        window.addEventListener('resize', resizeMatrix);
-        matrixInterval = setInterval(drawMatrix, 50);
+
+    // 鼠标移动聚光灯效果
+    document.addEventListener('mousemove', (e) => {
+      if (isLoaded || !textContainer) return;
+      const rect = textContainer.getBoundingClientRect();
+      const xRel = e.clientX - rect.left;
+      const yRel = e.clientY - rect.top;
+      textContainer.style.setProperty('--x', xRel + 'px');
+      textContainer.style.setProperty('--y', yRel + 'px');
+    });
+
+    // 模拟加载进度
+    function simulateLoading() {
+      initText();
+      animateText();
+      let progress = 0;
+      const duration = SPLASH_DURATION_MS;
+      const interval = 50;
+      const step = 100 / (duration / interval);
+      const timer = setInterval(() => {
+        progress += step + Math.random() * 2;
+        if (progress >= 100) {
+          progress = 100;
+          clearInterval(timer);
+          finishLoading();
+        }
+        if (progressBar) progressBar.style.width = progress + '%';
+        if (loadingText) loadingText.textContent = 'SYSTEM INITIALIZING... ' + Math.floor(progress) + '%';
+      }, interval);
+    }
+
+    function finishLoading() {
+      clearTimeout(forceTimeout);
+      isLoaded = true;
+      if (loadingText) {
+        loadingText.textContent = 'ACCESS GRANTED';
+        loadingText.style.color = '#00f3ff';
       }
-    } catch (e) { /* Canvas 不支持时跳过 */ }
-    setTimeout(switchToMain, 3500);
+      if (progressBar) progressBar.style.boxShadow = '0 0 20px #00f3ff';
+      // 进度条100%后进入主程序
+      setTimeout(switchToMain, FADE_OUT_DELAY_MS);
+    }
+
+    simulateLoading();
   }
 
   // ======================== 初始化 ========================
@@ -2405,15 +2788,17 @@ body {
       if (DOM.drawer_close) DOM.drawer_close.addEventListener("click", () => DrawerSystem.close());
       if (DOM.drawer_overlay) DOM.drawer_overlay.addEventListener("click", () => DrawerSystem.close());
       loadInputCache();
-      fetchLottery(); runAnalysis(); initAutoRefresh(); initSplashScreen();
+      fetchLottery(); runAnalysis(); initAutoRefresh();
       window.addEventListener("beforeunload", () => {
         const t = window._shenmaTimers || {};
         if (t.countdownTimer) clearInterval(t.countdownTimer);
         if (t.autoRefreshTimer) clearInterval(t.autoRefreshTimer);
         if (t.regularPollTimer) clearInterval(t.regularPollTimer);
       });
-      console.log("%c✅ 神码再现 v3.7.6 融合增强版已加载", "color:#00ffea;font-weight:bold");
+      if (window.__DEBUG__) console.log("%c✅ 神码再现 v3.7.7 融合增强版已加载", "color:#00ffea;font-weight:bold");
     } catch (e) { console.error("初始化失败:", e); }
+    // 无论 try 块是否出错，启动画面必定执行
+    initSplashScreen();
   }
 
   if (document.readyState === 'loading') {
@@ -2427,6 +2812,12 @@ body {
 (function () {
   "use strict";
   window.FREQ_ADJ_ENABLED = true;
+
+  // 安全存储（复用主程序或独立实现）
+  function _safeSetItem(key, value) {
+    try { localStorage.setItem(key, value); return true; }
+    catch (e) { if (e.name === 'QuotaExceededError') console.warn('[localStorage] 设置存储已满'); return false; }
+  }
 
   const settingsBtn = document.getElementById('settingsBtn');
   const settingsDropdown = document.getElementById('settingsDropdown');
@@ -2513,7 +2904,7 @@ body {
     freqAdjToggle.addEventListener('change', function () {
       window.FREQ_ADJ_ENABLED = freqAdjToggle.checked;
       try {
-        localStorage.setItem('shenma_freq_adj', JSON.stringify({ enabled: freqAdjToggle.checked, _t: Date.now() }));
+        _safeSetItem('shenma_freq_adj', JSON.stringify({ enabled: freqAdjToggle.checked, _t: Date.now() }));
       } catch (e) {}
       const numbersEl = document.getElementById('numbers');
       if (numbersEl) {
@@ -2529,7 +2920,7 @@ body {
     });
   }
 
-  console.log("%c✅ 设置菜单已加载", "color:#00ffea;font-weight:bold");
+  if (window.__DEBUG__) console.log("%c✅ 设置菜单已加载", "color:#00ffea;font-weight:bold");
 })();
 </script>
 </body>
