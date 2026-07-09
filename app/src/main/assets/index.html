@@ -12,8 +12,134 @@
 <meta name="description" content="神玛再现 · 杀码助手，支持频次分析、实时开奖、历史查询">
 <title>神码再现 v3.7.7 · 融合增强版</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<!-- Tailwind Play CDN 为 JIT 编译器，动态生成CSS，无法使用固定SRI --><script src="https://cdn.tailwindcss.com"></script>
+<!-- Tailwind Play CDN 为 JIT 编译器，async防止断网时阻塞渲染 --><script async src="https://cdn.tailwindcss.com"></script>
 <style>
+  /* === 关键布局类 !important 保障（断网时优先级最高） === */
+  /* === 断网补充v2：网格+任意值类 === */
+  .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)) !important; }
+  .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+  .grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
+  .grid-cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)) !important; }
+  .grid-cols-6 { grid-template-columns: repeat(6, minmax(0, 1fr)) !important; }
+  .col-span-1 { grid-column: span 1 / span 1 !important; }
+  .col-span-2 { grid-column: span 2 / span 2 !important; }
+  .col-span-3 { grid-column: span 3 / span 3 !important; }
+  .col-span-full { grid-column: 1 / -1 !important; }
+  .text-\[\#00ffea\] { color: #00ffea !important; }
+  .text-\[\#ff0055\] { color: #ff0055 !important; }
+  .bg-\[\#0a0a12\] { background-color: #0a0a12 !important; }
+  .border-\[\#00ffea\]\/20 { border-color: rgba(0,255,234,0.2) !important; }
+  .border-\[\#00ffea\]\/30 { border-color: rgba(0,255,234,0.3) !important; }
+  .border-\[\#00ffea\]\/50 { border-color: rgba(0,255,234,0.5) !important; }
+  .border-\[\#ff0055\]\/50 { border-color: rgba(255,0,85,0.5) !important; }
+  .bg-black\/30 { background-color: rgba(0,0,0,0.3) !important; }
+  .border-gray-700\/50 { border-color: rgba(55,65,81,0.5) !important; }
+  .min-h-\[100px\] { min-height: 100px !important; }
+  .min-h-\[200px\] { min-height: 200px !important; }
+  .max-h-\[90vh\] { max-height: 90vh !important; }
+  .text-\[10px\] { font-size: 10px !important; line-height: 14px !important; }
+  .-translate-x-1\/2 { transform: translateX(-50%) !important; }
+  .z-\[200\] { z-index: 200 !important; }
+  .via-\[\#9d00ff\]\/20 { --tw-gradient-to: rgb(157 0 255 / 0); --tw-gradient-stops: var(--tw-gradient-from), rgba(157,0,255,0.2), var(--tw-gradient-to) !important; }
+  .to-\[\#ff0055\]\/20 { --tw-gradient-to: rgba(255,0,85,0.2) !important; }
+  .from-\[\#00ffea\]\/20 { --tw-gradient-from: rgba(0,255,234,0.2) !important; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important; }
+  .from-\[\#00ffea\] { --tw-gradient-from: #00ffea !important; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important; }
+  .from-\[\#00ff88\]\/80 { --tw-gradient-from: rgba(0,255,136,0.8) !important; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important; }
+  .to-\[\#ff0055\] { --tw-gradient-to: #ff0055 !important; }
+  .to-emerald-600\/80 { --tw-gradient-to: rgba(5,150,105,0.8) !important; }
+  .hover\:bg-\[\#00ffea\]\/10:hover { background-color: rgba(0,255,234,0.1) !important; }
+  .hover\:bg-\[\#00ffea\]\/20:hover { background-color: rgba(0,255,234,0.2) !important; }
+  .hover\:bg-\[\#ff0055\]\/10:hover { background-color: rgba(255,0,85,0.1) !important; }
+  .hover\:shadow-\[0_0_20px_rgba\(0\,255\,136\,0\.6\)\]:hover { box-shadow: 0 0 20px rgba(0,255,136,0.6) !important; }
+  .focus\:outline-none:focus { outline: 2px solid transparent; outline-offset: 2px !important; }
+  .focus\:border-\[\#00ffea\]:focus { border-color: #00ffea !important; }
+  .shadow-\[0_-10px_40px_rgba\(0\,0\,0\,0\.8\)\] { box-shadow: 0 -10px 40px rgba(0,0,0,0.8) !important; }
+  .shadow-\[0_0_20px_rgba\(0\,255\,234\,0\.3\)\] { box-shadow: 0 0 20px rgba(0,255,234,0.3) !important; }
+  .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap !important; }
+  .font-mono { font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace !important; }
+  .tracking-wider { letter-spacing: 0.05em !important; }
+  .tracking-widest { letter-spacing: 0.1em !important; }
+  .resize-y { resize: vertical !important; }
+  .bg-clip-text { -webkit-background-clip: text; background-clip: text !important; }
+
+
+  .flex { display: flex !important; }
+  .inline-flex { display: inline-flex !important; }
+  .grid { display: grid !important; }
+  .block { display: block !important; }
+  .hidden { display: none !important; }
+  .items-center { align-items: center !important; }
+  .items-start { align-items: flex-start !important; }
+  .justify-center { justify-content: center !important; }
+  .justify-between { justify-content: space-between !important; }
+  .flex-1 { flex: 1 1 0% !important; }
+  .flex-col { flex-direction: column !important; }
+  .flex-wrap { flex-wrap: wrap !important; }
+  .gap-1 { gap: 4px !important; }
+  .gap-2 { gap: 8px !important; }
+  .gap-3 { gap: 12px !important; }
+  .w-4 { width: 1rem !important; }
+  .h-4 { height: 1rem !important; }
+  .w-5 { width: 1.25rem !important; }
+  .h-5 { height: 1.25rem !important; }
+  .w-8 { width: 2rem !important; }
+  .h-8 { height: 2rem !important; }
+  .w-full { width: 100% !important; }
+  .w-20 { width: 5rem !important; }
+  .h-20 { height: 5rem !important; }
+  .py-2 { padding-top: 8px !important; padding-bottom: 8px !important; }
+  .px-4 { padding-left: 16px !important; padding-right: 16px !important; }
+  .p-2 { padding: 8px !important; }
+  .p-3 { padding: 12px !important; }
+  .p-4 { padding: 16px !important; }
+  .mt-1 { margin-top: 4px !important; }
+  .mt-2 { margin-top: 8px !important; }
+  .mt-4 { margin-top: 16px !important; }
+  .mt-6 { margin-top: 24px !important; }
+  .mb-1 { margin-bottom: 4px !important; }
+  .mb-4 { margin-bottom: 16px !important; }
+  .mx-auto { margin-left: auto !important; margin-right: auto !important; }
+  .my-4 { margin-top: 16px !important; margin-bottom: 16px !important; }
+  .text-sm { font-size: 14px !important; line-height: 20px !important; }
+  .text-xs { font-size: 12px !important; line-height: 16px !important; }
+  .text-lg { font-size: 18px !important; line-height: 28px !important; }
+  .text-3xl { font-size: 30px !important; line-height: 36px !important; }
+  .font-semibold { font-weight: 600 !important; }
+  .font-bold { font-weight: 700 !important; }
+  .font-black { font-weight: 900 !important; }
+  .rounded-lg { border-radius: 8px !important; }
+  .rounded-xl { border-radius: 12px !important; }
+  .rounded-full { border-radius: 9999px !important; }
+  .bg-transparent { background-color: transparent !important; }
+  .text-center { text-align: center !important; }
+  .text-black { color: #000 !important; }
+  .opacity-0 { opacity: 0 !important; }
+  .opacity-25 { opacity: 0.25 !important; }
+  .opacity-50 { opacity: 0.5 !important; }
+  .opacity-75 { opacity: 0.75 !important; }
+  .cursor-pointer { cursor: pointer !important; }
+  .pointer-events-none { pointer-events: none !important; }
+  .overflow-hidden { overflow: hidden !important; }
+  .overflow-x-auto { overflow-x: auto !important; }
+  .overflow-y-auto { overflow-y: auto !important; }
+  .relative { position: relative !important; }
+  .fixed { position: fixed !important; }
+  .inset-0 { top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important; }
+  .inset-x-0 { left: 0 !important; right: 0 !important; }
+  .bottom-0 { bottom: 0 !important; }
+  .top-0 { top: 0 !important; }
+  .z-10 { z-index: 10 !important; }
+  .z-40 { z-index: 40 !important; }
+  .z-50 { z-index: 50 !important; }
+  .max-w-4xl { max-width: 56rem !important; }
+  .mx-auto { margin-left: auto !important; margin-right: auto !important; }
+  .pb-20 { padding-bottom: 5rem !important; }
+  .pb-4 { padding-bottom: 1rem !important; }
+  .border { border-width: 1px !important; }
+  .border-b { border-bottom-width: 1px !important; }
+
+
 /* ======================== style.css ======================== */
 :root {
   --ball-highlight: radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.95) 0%, transparent 30%);
@@ -59,6 +185,28 @@ body {
 .animate-spin { animation: spin 1s linear infinite; }
 
 /* 自定义布局类 */
+  /* === 断网fallback补充类（v3.7.7修复21个缺失） === */
+  .w-4 { width: 1rem; }
+  .h-4 { height: 1rem; }
+  .bottom-24 { bottom: 6rem; }
+  .py-8 { padding-top: 2rem; padding-bottom: 2rem; }
+  .space-y-4 > * + * { margin-top: 1rem; }
+  .text-black { color: #000; }
+  .opacity-25 { opacity: 0.25; }
+  .opacity-50 { opacity: 0.5; }
+  .opacity-75 { opacity: 0.75; }
+  .border-\[\#00ffea\] { border-color: #00ffea; }
+  .focus\:outline-none:focus { outline: 2px solid transparent; outline-offset: 2px; }
+  .focus\:border-\[\#00ffea\]:focus { border-color: #00ffea; }
+  .active\:scale-95:active { transform: scale(0.95); }
+  .hover\:bg-\[\#00ffea\]\/10:hover { background-color: rgba(0,255,234,0.1); }
+  .hover\:bg-\[\#00ffea\]\/20:hover { background-color: rgba(0,255,234,0.2); }
+  .hover\:bg-\[\#ff0055\]\/10:hover { background-color: rgba(255,0,85,0.1); }
+  .hover\:shadow-\[0_0_20px_rgba\(0\,255\,136\,0\.6\)\]:hover { box-shadow: 0 0 20px rgba(0,255,136,0.6); }
+  .shadow-\[0_-10px_40px_rgba\(0\,0\,0\,0\.8\)\] { box-shadow: 0 -10px 40px rgba(0,0,0,0.8); }
+  .shadow-\[0_0_20px_rgba\(0\,255\,234\,0\.3\)\] { box-shadow: 0 0 20px rgba(0,255,234,0.3); }
+  .via-\[\#ff0055\] { --tw-gradient-to: rgb(255 0 85 / 0); --tw-gradient-stops: var(--tw-gradient-from), #ff0055, var(--tw-gradient-to); }
+  .to-\[\#9d00ff\] { --tw-gradient-to: #9d00ff; }
 .dgrid-6 { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px; }
 .dgrid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
 .dgrid-5 { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
@@ -204,8 +352,9 @@ body {
   text-shadow: 0 0 2px rgba(255,255,255,0.5), 0 0 4px rgba(0,0,0,0.8);
 }
 
-#result .flex-wrap {
-  gap: 3px;
+#result .flex-wrap.flex-1 {
+  row-gap: 1px !important;   /* 行间距 */
+  column-gap: 3px !important; /* 列间距 */
 }
 
 #result .ball-3d {
@@ -230,7 +379,7 @@ body {
 
 /* ======================== 横屏适配 ======================== */
 @media (orientation: landscape) and (min-width: 500px) {
-  #result .flex-wrap {
+  #result .center {
     gap: 8px;
   }
   #result .ball-3d {
@@ -836,6 +985,7 @@ body {
 /* ======================== Tailwind 备用类 ======================== */
 .relative { position: relative; }
 .fixed { position: fixed; }
+  .sticky { position: sticky !important; }
 .sticky { position: sticky; }
 .inset-0 { inset: 0; }
 .inset-x-0 { left: 0; right: 0; }
@@ -929,6 +1079,7 @@ body {
 .transition-all { transition-property: all; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
 .border { border-width: 1px; }
 .border-b { border-bottom-width: 1px; }
+  .border-t-2 { border-top-width: 2px !important; }
 .border-t-2 { border-top-width: 2px; }
 .border-t { border-top-width: 1px; }
 .border-x { border-left-width: 1px; border-right-width: 1px; }
@@ -1901,7 +2052,7 @@ body {
         }
 
         const row = document.createElement('div');
-        row.className = "flex items-start gap-2 mb-1 flex-wrap";
+        row.className = "flex items-start gap-1 mb-1 flex-wrap";
 
         const label = document.createElement('span');
         label.className = "text-xs text-green-500 font-mono min-w-[30px] pt-2";
@@ -1909,7 +2060,7 @@ body {
         row.appendChild(label);
 
         const ballsWrap = document.createElement('div');
-        ballsWrap.className = "flex flex-wrap gap-2 flex-1";
+        ballsWrap.className = "flex flex-wrap gap-1 flex-1";
 
         const nums = freqMap.get(f).sort((a, b) => a - b);
         sortedFreqMap.set(f, nums.slice());
@@ -1964,7 +2115,7 @@ body {
           }
 
           const row = document.createElement('div');
-          row.className = "flex items-start gap-2 mb-2 flex-wrap";
+          row.className = "flex items-start gap-1 mb-2 flex-wrap";
 
           const label = document.createElement('span');
           label.className = "text-xs text-gray-500 font-mono min-w-[30px] pt-2";
@@ -1972,7 +2123,7 @@ body {
           row.appendChild(label);
 
           const ballsWrap = document.createElement('div');
-          ballsWrap.className = "flex flex-wrap gap-2 flex-1";
+          ballsWrap.className = "flex flex-wrap gap-1 flex-1";
 
           for (const n of zeroCountNumbers) {
             const color = numProps[n] ? numProps[n].color : getBallColor(n);
