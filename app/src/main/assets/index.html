@@ -2,17 +2,24 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
 <meta name="theme-color" content="#080818">
-<link rel="manifest" href="manifest.json">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src *; img-src * data:;">
+<link rel="manifest" href="data:application/manifest+json,{%22name%22:%22%E7%A5%9E%E7%A0%81%E5%86%8D%E7%8E%B0%22,%22short_name%22:%22%E7%A5%9E%E7%A0%81%22,%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22%23080818%22,%22theme_color%22:%22%23080818%22}">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; manifest-src 'self' data:; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src *; img-src * data:;">
 <meta name="referrer" content="no-referrer-when-downgrade">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta http-equiv="Cache-Control" content="max-age=3600">
-<meta name="description" content="神玛再现 · 杀码助手，支持频次分析、实时开奖、历史查询">
+<meta name="description" content="神码再现 · 杀码助手，支持频次分析、实时开奖、历史查询">
 <title>神码再现 v3.7.7 · 融合增强版</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<!-- Tailwind Play CDN 为 JIT 编译器，动态生成CSS，无法使用固定SRI --><script src="https://cdn.tailwindcss.com"></script>
+<!-- Tailwind Play CDN 为 JIT 编译器，动态生成CSS，无法使用固定SRI -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  // 降级检测：若 Tailwind CDN 加载失败，fallback CSS 仍可保证基本布局
+  if (typeof window.tailwind === 'undefined') {
+    console.warn('[Tailwind] CDN 加载失败，使用内置 fallback CSS');
+  }
+</script>
 <style>
 /* ======================== style.css ======================== */
 :root {
@@ -24,6 +31,7 @@
   --neon-cyan: #00f3ff;
   --neon-pink: #ff0055;
   --font-main: "Microsoft YaHei", "Heiti SC", sans-serif;
+  --z-overlay: 9999;
 }
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 body {
@@ -599,7 +607,7 @@ body {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  z-index: 9999;
+  z-index: var(--z-overlay);
   pointer-events: none;
   display: flex;
   align-items: center;
@@ -684,14 +692,13 @@ body {
 
 .blackhole { will-change: width, height, opacity; }
 /* .distortion, .crack, .spark removed — JS never creates elements with these classes */
-.blackhole { will-change: width, height, opacity; }
 
 /* 启动画面 */
 #splash-screen {
   position: fixed;
   inset: 0;
   background: #000;
-  z-index: 9999;
+  z-index: var(--z-overlay);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -735,7 +742,7 @@ body {
 
 .settings-dropdown {
   position: fixed;
-  z-index: 9999;
+  z-index: var(--z-overlay);
   min-width: 200px;
   background: #0a0a12;
   border: 1px solid rgba(0, 255, 234, 0.4);
@@ -837,7 +844,7 @@ body {
 .relative { position: relative; }
 .fixed { position: fixed; }
 .sticky { position: sticky; }
-.inset-0 { inset: 0; }
+.inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
 .inset-x-0 { left: 0; right: 0; }
 .bottom-0 { bottom: 0; }
 .top-0 { top: 0; }
@@ -955,6 +962,25 @@ body {
 .shadow-\[0_-10px_40px_rgba\(0\,0\,0\,0\.8\)\] { box-shadow: 0 -10px 40px rgba(0,0,0,0.8); }
 .shadow-\[0_0_20px_rgba\(0\,255\,234\,0\.3\)\] { box-shadow: 0 0 20px rgba(0,255,234,0.3); }
 
+/* ---- 补充：JS 动态生成内容中使用的 Tailwind 类 fallback ---- */
+.w-4 { width: 16px; }
+.h-4 { height: 16px; }
+.text-black { color: #000; }
+.text-green-500 { color: #22c55e; }
+.text-amber-400 { color: #fbbf24; }
+.text-2xl { font-size: 24px; line-height: 32px; }
+.grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.h-0\.5 { height: 2px; }
+.min-w-\[30px\] { min-width: 30px; }
+.min-h-\[40px\] { min-height: 40px; }
+.pt-2 { padding-top: 8px; }
+.my-3 { margin-top: 12px; margin-bottom: 12px; }
+.mb-2 { margin-bottom: 8px; }
+.shrink-0 { flex-shrink: 0; }
+.opacity-25 { opacity: 0.25; }
+.opacity-75 { opacity: 0.75; }
+.space-y-4 > :not([hidden]) ~ :not([hidden]) { margin-top: 1rem; }
+
 /* ======================== 光影特效启动画面 ======================== */
 
 
@@ -970,7 +996,7 @@ body {
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 9999;
+            z-index: var(--z-overlay);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -1301,7 +1327,6 @@ body {
   window.cancelAnimationFrame = window.cancelAnimationFrame || window.webkitCancelAnimationFrame || window.mozCancelAnimationFrame || function(id) { clearTimeout(id); };
 
   // ======================== 兼容性检查 ========================
-  // ======================== 兼容性检查 ========================
   if (typeof Promise === 'undefined' || typeof fetch === 'undefined') {
     document.body.innerHTML = '<div style="text-align:center;padding:40px 20px;color:#f87171;font-family:sans-serif;"><h2>浏览器版本过低</h2><p>请使用支持 Promise 和 fetch 的现代浏览器（Chrome 45+, Safari 10.1+, Firefox 40+, iOS 10.3+）</p></div>';
     throw new Error('Browser does not support Promise or fetch');
@@ -1395,9 +1420,12 @@ body {
 
   async function syncTime() {
     try {
-      const res = await fetch('https://vv.video.qq.com/checktime?otype=json', { 
-        signal: AbortSignal.timeout(5000) 
+      const controller = new AbortController();
+      const timeoutId = setTimeout(function() { controller.abort(); }, 5000);
+      const res = await fetch('https://vv.video.qq.com/checktime?otype=json', {
+        signal: controller.signal
       });
+      clearTimeout(timeoutId);
       if (!res.ok) throw new Error('HTTP ' + res.status);
       const text = await res.text();
       const json = JSON.parse(text.replace(/^QZOutputJson=/, '').replace(/;?$/, ''));
@@ -1556,7 +1584,7 @@ body {
         const data = parsed.cache[year];
         if (Array.isArray(data) && data.length > 0) historyCache[year] = data;
       }
-      if (parsed.lastYear) historyYearLoaded = parsed.lastYear;
+      if (parsed.lastYear) historyYearLoaded = Number(parsed.lastYear);
       // 加载后立即修剪
       pruneHistoryCache();
     } catch (e) { console.warn("loadHistoryCache failed", e); }
@@ -1595,17 +1623,20 @@ body {
   }
 
   let truncToastShown = false; // 模块内变量替代 window._truncToastShown
+  let toastTimer = null;
   function showToast(msg) {
     const t = DOM.toast;
     if (!t) return;
+    if (toastTimer) { clearTimeout(toastTimer); toastTimer = null; }
     t.textContent = msg;
     t.classList.remove("translate-y-20", "opacity-0");
     t.style.transform = "translateY(0)";
     t.style.opacity = "1";
-    setTimeout(() => {
+    toastTimer = setTimeout(() => {
       t.classList.add("translate-y-20", "opacity-0");
       t.style.transform = "translateY(5rem)";
       t.style.opacity = "0";
+      toastTimer = null;
     }, TOAST_DURATION_MS);
   }
 
@@ -1623,7 +1654,7 @@ body {
     if (!input || !input.trim()) return { nums: [], truncated: false };
     const cleaned = input.replace(/《[^》]*》/g, " ").replace(/[^\d鼠牛虎兔龍蛇馬羊猴雞狗豬鸡马龙猪\s]/g, " ").replace(/([鼠牛虎兔龍蛇馬羊猴雞狗豬鸡马龙猪])/g, " $1 ");
     const tokens = cleaned.split(/\s+/).filter(function(t) { return t.length > 0; });
-    const results = [];
+    let results = [];
     for (let i = 0; i < tokens.length; i++) {
       const token = tokens[i];
       const normalizedToken = normalizeZodiac(token);
@@ -1749,7 +1780,7 @@ body {
   let activeFlyAnim = null;
   function launchUniqueFlyEffect(targetNum, colorClass) {
     if (activeFlyAnim) { cancelAnimationFrame(activeFlyAnim); activeFlyAnim = null; }
-    const els = document.querySelectorAll(".flying-unique-ball, .blackhole, .distortion, .accretion-disk, .particle-stream");
+    const els = document.querySelectorAll(".flying-unique-ball, .blackhole, .accretion-disk, .particle-stream");
     for (let ei = 0; ei < els.length; ei++) {
       const el = els[ei];
       if (el._anim) { try { el._anim.cancel(); } catch(e) {} }
@@ -2018,7 +2049,7 @@ body {
         cell.className = "text-center flex flex-col items-center justify-center";
 
         const valDiv = document.createElement('div');
-        valDiv.className = "text-[#00ffea] font-bold text-2xl tracking-wider";
+        valDiv.className = "text-[#00ffea] font-bold text-lg tracking-wider";
         valDiv.textContent = item.val;
 
         const labelDiv = document.createElement('div');
@@ -2069,7 +2100,7 @@ body {
     if (!resultEl) return;
     resultEl.addEventListener("click", e => {
       const btn = e.target.closest("[data-num]");
-      if (!btn) return;
+      if (!btn || btn.dataset.num === "") return;
       const num = Number(btn.dataset.num);
       if (!Number.isNaN(num)) copyNumber(num);
     });
@@ -2116,8 +2147,12 @@ body {
       try {
         const ctrl = new AbortController();
         const timeoutId = setTimeout(() => ctrl.abort(), options.timeout || 8000);
-        const res = await fetch(url, { ...options, signal: ctrl.signal });
-        clearTimeout(timeoutId);
+        let res;
+        try {
+          res = await fetch(url, { ...options, signal: ctrl.signal });
+        } finally {
+          clearTimeout(timeoutId);
+        }
         if (!res.ok) throw new Error("HTTP " + res.status);
         const ct = res.headers.get("content-type") || "";
         if (!ct.includes("json") && !ct.includes("text")) {
@@ -2164,7 +2199,6 @@ body {
       if (!item.expect || !item.openCode || typeof item.openCode !== "string") {
         throw new Error("Invalid lottery data structure: missing expect or openCode");
       }
-      if (!item.openCode || typeof item.openCode !== "string") { showToast("数据字段不完整"); return; }
       try { safeSetItem(LS_CACHE_KEY, JSON.stringify({ data, time: Date.now() })); } catch (e) {}
       const isNewPeriod = lastLotteryPeriod !== item.expect;
       if (isNewPeriod) {
@@ -2406,7 +2440,7 @@ body {
       const pageData = sorted.slice(start, start + HISTORY_PAGE_SIZE);
       const frag = document.createDocumentFragment();
       for (const item of pageData) {
-        const expect = escapeHtml(item.expect || "");
+        const expect = item.expect || "";
         let ballsHtml = "";
         if (item.openCode && item.openCode.trim()) {
           const codes = item.openCode.split(",").map(c => escapeHtml(c.trim()));
@@ -2617,7 +2651,7 @@ body {
     countdownTimer = setInterval(updateCountdown, 1000);
     checkDrawWindow();
     autoRefreshTimer = setInterval(checkDrawWindow, DRAW_WINDOW_CHECK_MS);
-    const regularPollTimer = setInterval(regularPoll, REGULAR_POLL_MS);
+    const regularPollTimer = setInterval(regularPoll, DRAW_CONFIG.regularMs);
 
     const _onForeground = function() {
       setTimeout(function() { fetchLottery(); }, 300);
@@ -2678,7 +2712,7 @@ body {
     // 强制超时：无论进度如何，最多5秒后必定进入主程序
     const forceTimeout = setTimeout(function() {
       if (!switched) {
-        console.warn('[启动画面] 强制超时进入主程序');
+        if (window.__DEBUG__) console.warn('[启动画面] 强制超时进入主程序');
         switchToMain();
       }
     }, 5000);
@@ -2731,14 +2765,15 @@ body {
     }
 
     // 鼠标移动聚光灯效果
-    document.addEventListener('mousemove', (e) => {
+    function mouseMoveHandler(e) {
       if (isLoaded || !textContainer) return;
       const rect = textContainer.getBoundingClientRect();
       const xRel = e.clientX - rect.left;
       const yRel = e.clientY - rect.top;
       textContainer.style.setProperty('--x', xRel + 'px');
       textContainer.style.setProperty('--y', yRel + 'px');
-    });
+    }
+    document.addEventListener('mousemove', mouseMoveHandler);
 
     // 模拟加载进度
     function simulateLoading() {
@@ -2763,6 +2798,7 @@ body {
     function finishLoading() {
       clearTimeout(forceTimeout);
       isLoaded = true;
+      document.removeEventListener('mousemove', mouseMoveHandler);
       if (loadingText) {
         loadingText.textContent = 'ACCESS GRANTED';
         loadingText.style.color = '#00f3ff';
@@ -2899,15 +2935,24 @@ body {
     }
   });
 
+  let _scrollRAF = null, _resizeRAF = null;
   window.addEventListener('scroll', function () {
-    if (settingsDropdown && settingsDropdown.classList.contains('open')) {
-      closeDropdown();
-    }
+    if (_scrollRAF) return;
+    _scrollRAF = requestAnimationFrame(function() {
+      _scrollRAF = null;
+      if (settingsDropdown && settingsDropdown.classList.contains('open')) {
+        closeDropdown();
+      }
+    });
   }, true);
   window.addEventListener('resize', function () {
-    if (settingsDropdown && settingsDropdown.classList.contains('open')) {
-      positionDropdown();
-    }
+    if (_resizeRAF) return;
+    _resizeRAF = requestAnimationFrame(function() {
+      _resizeRAF = null;
+      if (settingsDropdown && settingsDropdown.classList.contains('open')) {
+        positionDropdown();
+      }
+    });
   });
 
   if (freqAdjToggle) {
