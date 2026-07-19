@@ -275,6 +275,14 @@ body {
   }
 }
 
+/* kill-line 本体（平均线）内联样式：不依赖 Tailwind 的 from-transparent/via/to-transparent 渐变类 */
+.kill-line {
+  position: relative;
+  height: 2px;
+  margin: 12px 0;
+  border-radius: 9999px;
+  background-image: linear-gradient(to right, transparent, #00ffea, transparent);
+}
 .kill-line::before, .kill-line::after {
   content: '\2702';
   position: absolute;
@@ -966,6 +974,10 @@ body {
 .to-\[\#9d00ff\] { --tw-gradient-to: #9d00ff; }
 .from-\[\#00ff88\]\/80 { --tw-gradient-from: rgba(0,255,136,0.8); }
 .to-emerald-600\/80 { --tw-gradient-to: rgba(5,150,105,0.8); }
+/* 平均线（kill-line）渐变端点补齐 */
+.from-transparent { --tw-gradient-from: transparent; }
+.via-\[\#00ffea\] { --tw-gradient-via: #00ffea; }
+.to-transparent { --tw-gradient-to: transparent; }
 .bg-clip-text { -webkit-background-clip: text; background-clip: text; }
 .bg-gradient-to-r { background-image: linear-gradient(to right, var(--tw-gradient-from), var(--tw-gradient-via, var(--tw-gradient-from)), var(--tw-gradient-to)); }
 .hover\:bg-\[\#00ffea\]\/10:hover { background-color: rgba(0,255,234,0.1); }
