@@ -10,7 +10,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta http-equiv="Cache-Control" content="max-age=3600">
 <meta name="description" content="神码再现 · 杀码助手，支持频次分析、实时开奖、历史查询">
-<title>神码再现 v3.7.7 · 融合增强版</title>
+<title>神码再现 v3.7.9 · 融合增强版</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <!-- Tailwind Play CDN 为 JIT 编译器，动态生成CSS，无法使用固定SRI -->
 <script src="https://cdn.tailwindcss.com"></script>
@@ -33,7 +33,20 @@
   --font-main: "Microsoft YaHei", "Heiti SC", sans-serif;
   --z-overlay: 9999;
 }
-* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+/* ===== Tailwind Preflight 核心（内联补充）===== */
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; border-width: 0; border-style: solid; border-color: #e5e7eb; }
+*, ::before, ::after { box-sizing: border-box; border-width: 0; border-style: solid; border-color: #e5e7eb; }
+button, input:where([type="button"], [type="reset"], [type="submit"]), [role="button"] { cursor: pointer; }
+button, select { text-transform: none; }
+button, [type="button"], [type="reset"], [type="submit"] { -webkit-appearance: button; background-color: transparent; background-image: none; }
+button, input, optgroup, select, textarea { font-family: inherit; font-feature-settings: inherit; font-variation-settings: inherit; font-size: 100%; font-weight: inherit; line-height: inherit; color: inherit; margin: 0; padding: 0; }
+/* 补齐标题/段落等标签的 margin 重置（否则 CDN 失效时 h3 默认 margin 会撑高抽屉标题栏） */
+h1, h2, h3, h4, h5, h6 { font-size: inherit; font-weight: inherit; }
+blockquote, dl, dd, h1, h2, h3, h4, h5, h6, hr, figure, p, pre { margin: 0; }
+fieldset { margin: 0; padding: 0; }
+ol, ul, menu { list-style: none; margin: 0; padding: 0; }
+textarea { resize: vertical; }
+svg { display: block; vertical-align: middle; }
 body {
   font-family: 'Orbitron', system-ui, -apple-system, sans-serif;
   background: #080818;
@@ -946,14 +959,17 @@ body {
 .border-gray-700\/50 { border-color: rgba(55,65,81,0.5); }
 .from-\[\#00ffea\]\/20 { --tw-gradient-from: rgba(0,255,234,0.2); }
 .via-\[\#9d00ff\]\/20 { --tw-gradient-via: rgba(157,0,255,0.2); }
+.via-\[\#ff0055\] { --tw-gradient-via: #ff0055; }
 .to-\[\#ff0055\]\/20 { --tw-gradient-to: rgba(255,0,85,0.2); }
 .from-\[\#00ffea\] { --tw-gradient-from: #00ffea; }
 .to-\[\#ff0055\] { --tw-gradient-to: #ff0055; }
+.to-\[\#9d00ff\] { --tw-gradient-to: #9d00ff; }
 .from-\[\#00ff88\]\/80 { --tw-gradient-from: rgba(0,255,136,0.8); }
 .to-emerald-600\/80 { --tw-gradient-to: rgba(5,150,105,0.8); }
 .bg-clip-text { -webkit-background-clip: text; background-clip: text; }
 .bg-gradient-to-r { background-image: linear-gradient(to right, var(--tw-gradient-from), var(--tw-gradient-via, var(--tw-gradient-from)), var(--tw-gradient-to)); }
 .hover\:bg-\[\#00ffea\]\/10:hover { background-color: rgba(0,255,234,0.1); }
+.hover\:bg-\[\#00ffea\]\/20:hover { background-color: rgba(0,255,234,0.2); }
 .hover\:bg-\[\#ff0055\]\/10:hover { background-color: rgba(255,0,85,0.1); }
 .hover\:shadow-\[0_0_20px_rgba\(0\,255\,136\,0\.6\)\]:hover { box-shadow: 0 0 20px rgba(0,255,136,0.6); }
 .active\:scale-95:active { transform: scale(0.95); }
@@ -973,9 +989,17 @@ body {
 .h-0\.5 { height: 2px; }
 .min-w-\[30px\] { min-width: 30px; }
 .min-h-\[40px\] { min-height: 40px; }
+.min-h-\[48px\] { min-height: 48px; }
 .pt-2 { padding-top: 8px; }
 .my-3 { margin-top: 12px; margin-bottom: 12px; }
 .mb-2 { margin-bottom: 8px; }
+.opacity-50 { opacity: 0.5; }
+.bottom-24 { bottom: 6rem; }
+.left-1\/2 { left: 50%; }
+.py-8 { padding-top: 32px; padding-bottom: 32px; }
+.border-\[\#00ffea\] { border-color: #00ffea; }
+.transform { transform: translate(0, 0); }
+.dtext-center { text-align: center; }
 .shrink-0 { flex-shrink: 0; }
 .opacity-25 { opacity: 0.25; }
 .opacity-75 { opacity: 0.75; }
@@ -1264,7 +1288,7 @@ body {
 </div>
 
 <script>
-// ======================== data.js v3.7.7 ========================
+// ======================== data.js v3.7.9 ========================
 (function () {
   "use strict";
   const MAX_NUMBERS = 5000;
@@ -1318,7 +1342,7 @@ body {
   window.APP_DATA={MAX_NUMBERS,SHENGXIAO,CATEGORIES,DUAN,numProps,ZODIAC_SEQUENCE,BASE_YEAR,generateShengxiaoMap,generateWuxing,getNumberWuxing,WUXING_BASE_SEQ};
 })();
 
-// ======================== app.js v3.7.7 ========================
+// ======================== app.js v3.7.9 ========================
 (function () {
   "use strict";
 
@@ -2529,7 +2553,7 @@ body {
         return [
           '<div>',
             `<select id="historyYear" class="dselect"><option value="">选择年份</option>${opts}</select>`,
-            '<div id="historyLoading" class="dhidden dtext-center dpy-4"><svg class="animate-spin" style="width:24px;height:24px;margin:0 auto;color:#00ffea;" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg></div>',
+            '<div id="historyLoading" class="dhidden dpy-4" style="text-align:center;"><svg class="animate-spin" width="24" height="24" style="width:24px !important;height:24px !important;margin:0 auto;color:#00ffea;" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg></div>',
             '<div id="historyContent" class="dmt-3 hide-scrollbar"></div>',
             '<div id="historyPagination" class="dflex-between dmt-6 dpx-1 dhidden">',
               '<button type="button" id="history-prev" class="dpage-btn">← 上1页</button>',
@@ -2841,7 +2865,7 @@ body {
         if (t.autoRefreshTimer) clearInterval(t.autoRefreshTimer);
         if (t.regularPollTimer) clearInterval(t.regularPollTimer);
       });
-      if (window.__DEBUG__) console.log("%c✅ 神码再现 v3.7.7 融合增强版已加载", "color:#00ffea;font-weight:bold");
+      if (window.__DEBUG__) console.log("%c✅ 神码再现 v3.7.9 融合增强版已加载", "color:#00ffea;font-weight:bold");
     } catch (e) { console.error("初始化失败:", e); }
     // 无论 try 块是否出错，启动画面必定执行
     initSplashScreen();
